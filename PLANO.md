@@ -6,11 +6,14 @@ Um diário de cachoeiras que mistura diário de papel com álbum de fotos. Você
 
 - **Formato: PWA.** O site é o próprio app. A pessoa abre o link no celular e adiciona à tela de início (no iPhone, pelo Safari: Compartilhar → "Adicionar à Tela de Início"). Funciona no iPhone e no Android, é grátis e atualiza sozinho.
 - **Privado e pessoal.** Só entra quem for convidado, com login. Cada pessoa tem o próprio diário. **Não há troca de informações entre as pessoas:** ninguém vê o diário, as fotos ou as avaliações dos outros.
-- **Banco, login e fotos:** Supabase.
+- **Tecnologia:** Next.js + Tailwind, Supabase (banco, login e fotos), hospedado na Vercel. Tudo nos planos gratuitos.
+- **Convite e login:** só o administrador (o dono do app) convida pessoas, pelo e-mail. O login é por **link mágico**: a pessoa digita o e-mail e recebe um link para entrar, sem senha. O administrador tem uma tela simples para convidar e remover pessoas.
+- **Idioma:** só português.
+- **Nome e endereço:** "Diário das Cachoeiras", em `diariodascachoeiras.vercel.app` por enquanto. Domínio próprio (.com.br) fica para depois.
 - **Dados das cachoeiras e trilhas:** OpenStreetMap (gratuito).
 - **Rota:** o app abre o Google Maps ou o Waze já com o destino.
 - **Previsão do tempo:** Open-Meteo (gratuita).
-- **Arte e ilustrações:** feitas pelo Claude (capa de couro, traços a lápis, broches, mesa de madeira, polaroids).
+- **Arte e ilustrações:** feitas pelo Claude. Madeira, couro e papel usam **texturas reais gratuitas** (de bancos de imagens livres de direitos). Traços a lápis, "+", broches, carimbos, rabiscos, post-its e moldura das polaroids são **desenhados em código (SVG)**.
 
 ## Visual geral
 
@@ -42,7 +45,9 @@ Um diário de cachoeiras que mistura diário de papel com álbum de fotos. Você
 - **Sumário** nas primeiras páginas.
 - **Mapa desenhado à mão** na última página, com todas as cachoeiras visitadas.
 - **Fitinha marcadora** para pular direto para as favoritas.
-- **Diário cheio vira "Volume II"**, e os volumes antigos ficam numa estante.
+- **Cada volume tem 10 páginas (60 cachoeiras).** Diário cheio vira "Volume II", e os volumes antigos ficam numa estante.
+- **Apagar uma cachoeira:** as que vêm depois sobem uma vaga para preencher o buraco. O diário nunca fica com vagas vazias no meio, e o "+" fica sempre logo depois da última cachoeira.
+- **Voltar à mesma cachoeira:** cada visita é um registro novo, com fotos, data e avaliação próprias. Nos detalhes aparece "Você já esteve aqui N vezes", com links para as outras visitas.
 
 ### Ordem e filtros
 - **Padrão:** ordem de registro (a primeira registrada vem primeiro).
@@ -75,7 +80,8 @@ Cada cachoeira ocupa uma vaga da página e tem 4 partes, cada uma com sua ação
 - Você adiciona as fotos e os detalhes (veja abaixo).
 
 ### Fotos
-- **Até 10 fotos por cachoeira**, pensadas como "as 10 melhores" daquela visita.
+- **Até 10 fotos por visita**, pensadas como "as 10 melhores". Só fotos, sem vídeos.
+- **Capa:** você escolhe qual foto fica no topo da pilha de polaroids. A padrão é a primeira.
 - As fotos são comprimidas ao enviar. O plano gratuito do Supabase (1 GB) comporta cerca de 2 a 3 mil fotos.
 
 ---
@@ -84,10 +90,12 @@ Cada cachoeira ocupa uma vaga da página e tem 4 partes, cada uma com sua ação
 
 Abre pelo botão "Detalhes".
 
-- **Avaliações separadas**, além das 5 estrelas gerais:
+- **Avaliações separadas**, opcionais, de 1 a 5, além das 5 estrelas gerais:
   - Segurança
   - Movimento (vazia ou cheia)
-  - (outras a definir, por exemplo: trilha, água, beleza)
+  - Banho (água)
+  - Trilha
+  - Beleza
 - **"Como foi":** um texto livre, como num diário.
 - **Ficha da visita:**
   - Com quem foi (nomes escritos à mão, só para você)
@@ -106,6 +114,10 @@ Abre pelo botão "Detalhes".
 
 - A coleção fica numa **faixa de tecido**, como a de escoteiro, ou numa jaqueta jeans, com os broches pregados.
 - **Os broches exigem check-in por GPS** na cachoeira. Sem check-in, a visita entra no diário, mas não conta para os broches.
+  - O check-in vale a até **300 m** do ponto da cachoeira.
+  - O GPS funciona sem internet: o check-in fica salvo e é enviado depois.
+  - Em cachoeiras cadastradas por você (fora do mapa), o check-in define a localização dela.
+- Nos broches de contagem (5, 10, 25), a mesma cachoeira conta uma vez só, mesmo com várias visitas.
 - Exemplos de broches:
   - Primeira cachoeira
   - 5, 10 e 25 cachoeiras visitadas
@@ -136,7 +148,7 @@ Um mapa próprio para cachoeiras, meio Pokémon GO, mas focado em buscar.
 - **Lista "quero ir":** a cachoeira aparece no diário como um post-it colado, esperando a visita.
 - Tocar numa cachoeira abre a rota no Google Maps ou no Waze.
 
-> **Em aberto:** como não há troca de dados entre as pessoas, segurança, avaliação e movimento só existem para as cachoeiras que você mesmo já avaliou. Falta decidir de onde vêm esses dados para cachoeiras que você ainda não visitou.
+- **De onde vêm as notas do mapa:** de **médias anônimas** das avaliações de todos os usuários. O mapa mostra só a média, nunca quem avaliou. Fotos, textos e o diário de cada um continuam totalmente privados.
 
 ---
 
@@ -163,7 +175,6 @@ Um mapa próprio para cachoeiras, meio Pokémon GO, mas focado em buscar.
 
 - **Exportar o diário em PDF**, para imprimir como um livro de verdade.
 - **Retrospectiva do ano:** cachoeiras visitadas, quilômetros de trilha, favorita do ano.
-- **Nome final do app e endereço do site:** a definir.
 
 ---
 
@@ -197,7 +208,4 @@ Um mapa próprio para cachoeiras, meio Pokémon GO, mas focado em buscar.
 
 ## Perguntas em aberto
 
-- **Apagar uma cachoeira:** a vaga fica vazia ou as outras "sobem" para preencher? (resposta anterior ficou ambígua)
-- **Voltar à mesma cachoeira:** vira um registro novo ou as fotos entram no registro que já existe?
-- **Dados do mapa** para cachoeiras que você ainda não visitou (veja a seção 5).
-- **Nome final e endereço do site.**
+(Em andamento: rodadas de perguntas para fechar o plano.)
