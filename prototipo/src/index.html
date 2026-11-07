@@ -1,0 +1,807 @@
+<title>Diário das Cachoeiras</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Kalam:wght@300;400;700&family=Reenie+Beanie&display=swap">
+<style>
+/* Layout: uma mesa de madeira escura vista de cima; o livro no centro e três objetos de atalho na borda (embaixo no celular, à direita em tela grande). Mundo único e escuro, de propósito. */
+:root{
+  --mesa:#1c110a;
+  --tinta:#24304a;          /* tinta de caneta-tinteiro */
+  --lapis:#6d675e;          /* grafite */
+  --papel:#ece2cb;
+  --papel-sombra:#cdbf9f;
+  --ouro:#cfae63;           /* letras douradas da capa */
+  --carimbo:#a3392b;
+  --estrela:#d6a12a;
+  --creme:#efe4cc;          /* texto claro sobre a mesa */
+  --fita:#8c2f2a;
+  --f-capa:"IM Fell English", "Iowan Old Style", Georgia, serif;
+  --f-mao:"Kalam", "Segoe Print", "Bradley Hand", cursive;
+  --f-lapis:"Reenie Beanie", "Kalam", "Segoe Print", cursive;
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{
+  margin:0;background:var(--mesa);color:var(--creme);font-family:var(--f-mao);
+  overflow:hidden;-webkit-tap-highlight-color:transparent;
+}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+:focus-visible{outline:2px dashed var(--ouro);outline-offset:3px;border-radius:4px}
+
+/* ---------- mesa ---------- */
+.mesa{
+  position:relative;height:100%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+  padding-block:12px;box-sizing:border-box;row-gap:34px;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 38%, rgba(255,214,150,.16), transparent 70%),
+    radial-gradient(ellipse 120% 90% at 50% 50%, transparent 55%, rgba(0,0,0,.55)),
+    url("{{IMG:wood}}") center/cover;
+}
+
+/* ---------- tamanhos do livro ---------- */
+.palco{
+  --pw:min(calc(100vw - 32px), 460px, calc((100dvh - 152px) / 1.58));
+  --ph:calc(var(--pw) * 1.58);
+  position:relative;width:var(--pw);height:var(--ph);flex:none;
+  perspective:2200px;
+}
+@media (min-width:900px) and (min-height:560px){
+  .mesa{flex-direction:row;gap:28px}
+  .palco{
+    --pw:min(calc((100vw - 190px) / 2), 520px, calc((100dvh - 56px) / 1.42));
+    --ph:calc(var(--pw) * 1.42);
+    width:calc(var(--pw) * 2);
+  }
+}
+
+/* ---------- livro ---------- */
+.livro{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.6,.05,.25,1)}
+.folhas{position:absolute;inset:0;display:flex}
+.pagina{
+  position:relative;flex:1 1 0;min-width:0;height:100%;box-sizing:border-box;
+  background:
+    linear-gradient(90deg, rgba(90,60,20,.18), transparent 7%),
+    url("{{IMG:paper}}") center/cover;
+  color:var(--tinta);
+  box-shadow:0 18px 40px rgba(0,0,0,.55), 0 2px 0 rgba(0,0,0,.2);
+  border-radius:2px 6px 6px 2px;
+  padding:clamp(14px,4%,26px) clamp(12px,4.5%,28px) 34px;
+  display:flex;flex-direction:column;
+  transform-origin:left center;backface-visibility:hidden;
+}
+/* borda de folhas empilhadas */
+.pagina::after{content:"";position:absolute;top:4px;bottom:4px;right:-5px;width:5px;border-radius:0 3px 3px 0;
+  background:repeating-linear-gradient(180deg,#e6dbc0 0 2px,#c9bb98 2px 3px);box-shadow:2px 2px 6px rgba(0,0,0,.4)}
+.pagina.esq{border-radius:6px 2px 2px 6px;background:linear-gradient(270deg, rgba(90,60,20,.22), transparent 8%),url("{{IMG:paper}}") center/cover}
+.pagina.esq::after{right:auto;left:-5px;border-radius:3px 0 0 3px}
+.pagina.vazia{background:linear-gradient(270deg, rgba(90,60,20,.22), transparent 8%),url("{{IMG:paper}}") center/cover}
+
+.num-pag{position:absolute;bottom:8px;left:0;right:0;text-align:center;font-family:var(--f-lapis);font-size:20px;color:var(--lapis)}
+.virar{position:absolute;bottom:2px;width:44px;height:36px;font-family:var(--f-lapis);font-size:30px;color:var(--lapis);line-height:1}
+.virar.prox{right:6px}.virar.ant{left:6px}
+.virar[disabled]{opacity:.18;cursor:default}
+
+/* contracapa: mural do "quero ir" */
+.pagina.contracapa{background:url("{{IMG:endpaper}}") center/cover;color:var(--tinta);padding:22px 18px 34px;border-radius:6px 2px 2px 6px}
+.pagina.contracapa .num-pag{display:none}
+.mural-titulo{font-family:var(--f-capa);font-style:italic;color:#f3e7c8;font-size:clamp(17px,4.6vw,22px);text-align:center;text-shadow:0 1px 2px rgba(0,0,0,.5);margin:2px 0 14px}
+.postits{display:flex;flex-wrap:wrap;gap:16px 12px;justify-content:center;align-content:flex-start;flex:1}
+.postit{
+  width:clamp(110px,40%,170px);min-height:96px;padding:14px 10px 10px;box-sizing:border-box;
+  background:linear-gradient(180deg,#f6e27a,#f1d55d);color:#3a3320;font-size:15px;line-height:1.15;
+  box-shadow:2px 6px 10px rgba(0,0,0,.35);position:relative;text-align:left
+}
+.postit:nth-child(3n+1){transform:rotate(-3deg)}.postit:nth-child(3n+2){transform:rotate(2.5deg);background:linear-gradient(180deg,#f9c9b5,#f3b49b)}.postit:nth-child(3n){transform:rotate(-1deg);background:linear-gradient(180deg,#c9e6c0,#b5d9aa)}
+.postit::before{content:"";position:absolute;top:-8px;left:50%;width:46px;height:16px;transform:translateX(-50%) rotate(-2deg);background:rgba(255,255,255,.45);box-shadow:0 1px 2px rgba(0,0,0,.15)}
+.postit b{display:block;font-weight:700;font-size:16px}
+.postit small{display:block;margin-top:4px;font-size:13px;opacity:.8}
+.postit .quando{display:inline-block;margin-top:6px;border-top:1px dashed currentColor;padding-top:3px;font-size:13px}
+.mural-vazio{font-family:var(--f-lapis);font-size:22px;color:#f3e7c8;text-align:center;opacity:.85;max-width:24ch;margin:30px auto 0}
+
+/* ---------- vagas ---------- */
+.cab-pag{font-family:var(--f-lapis);font-size:22px;color:var(--lapis);margin:-4px 0 6px;min-height:22px;display:flex;justify-content:space-between;align-items:baseline}
+.cab-pag button{font-family:var(--f-lapis);font-size:20px;color:var(--carimbo);text-decoration:underline dashed}
+.grade{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,minmax(0,1fr));gap:clamp(8px,2.4%,16px) clamp(10px,3%,18px);min-height:0}
+.vaga{position:relative;min-width:0;min-height:0;display:flex;flex-direction:column;align-items:center}
+.cab{display:flex;align-items:flex-start;gap:6px;width:100%;text-align:left}
+.cab .nome{flex:1;min-width:0;font-weight:700;font-size:clamp(14px,3.9vw,18px);line-height:1.05;color:var(--tinta);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-decoration:underline;text-decoration-color:rgba(36,48,74,.25);text-underline-offset:3px}
+.cab .data{flex:none;font-size:clamp(11px,3vw,13px);color:var(--lapis);transform:rotate(-4deg);margin-top:2px;font-variant-numeric:tabular-nums}
+.cab:hover .nome{text-decoration-color:var(--tinta)}
+
+.pilha{position:relative;flex:1;width:100%;min-height:0;margin:4px 0 2px}
+.pola{
+  position:absolute;left:50%;top:50%;
+  height:min(92%, 118px);aspect-ratio:.86;box-sizing:border-box;
+  background:#f7f4ec;padding:5% 5% 18%;
+  box-shadow:0 3px 7px rgba(0,0,0,.35);
+  transform:translate(-50%,-50%) translate(calc(var(--dx,0%) * var(--k,1)), calc(var(--dy,0%) * var(--k,1))) rotate(calc(var(--r,0deg) * var(--k,1)));
+  transition:transform .25s ease;
+}
+.pola:last-child::before{content:"";position:absolute;top:-7px;left:50%;width:40%;height:13px;transform:translateX(-50%) rotate(-5deg);background:rgba(240,232,200,.62);box-shadow:0 1px 2px rgba(0,0,0,.15)}
+.pola img{display:block;width:100%;aspect-ratio:1;object-fit:cover;filter:saturate(.92) contrast(1.02)}
+.pilha:hover .pola{--k:1.6}
+.qtd-fotos{position:absolute;right:2px;bottom:0;font-size:12px;color:var(--lapis);z-index:6}
+
+.carimbo{position:absolute;z-index:6;pointer-events:none;right:-2px;top:26%;
+  width:clamp(40px,30%,54px);aspect-ratio:1;border-radius:50%;
+  border:2px solid var(--carimbo);color:var(--carimbo);opacity:.78;transform:rotate(-14deg);
+  display:grid;place-items:center;text-align:center;font-family:var(--f-capa);font-size:clamp(7px,1.9vw,9px);line-height:1;letter-spacing:.04em;
+  box-shadow:inset 0 0 0 2px rgba(163,57,43,.0), inset 0 0 0 3px #ece2cb00;
+  mask-image:radial-gradient(circle at 30% 40%, #000 55%, rgba(0,0,0,.6) 70%, #000 85%);
+}
+.carimbo.memoria{border-style:dashed;color:var(--lapis);border-color:var(--lapis);transform:rotate(9deg)}
+
+.estrelas{display:flex;gap:1px}
+.estrelas button{width:clamp(18px,5vw,22px);height:clamp(18px,5vw,22px);display:grid;place-items:center}
+.estrelas svg{width:100%;height:100%}
+.estrelas .on path{fill:var(--estrela);stroke:#8a6414}
+.estrelas .off path{fill:none;stroke:var(--lapis);stroke-dasharray:2 1.5}
+.detalhes-btn{font-size:clamp(12px,3.3vw,14px);color:var(--tinta);border-bottom:1.5px solid rgba(36,48,74,.45);line-height:1.1;margin-top:1px}
+
+/* vaga "+" a lápis */
+.vaga-mais{width:100%;height:100%;position:relative;display:grid;place-items:center;color:var(--lapis)}
+.vaga-mais svg.borda{position:absolute;inset:4px;width:calc(100% - 8px);height:calc(100% - 8px);overflow:visible}
+.vaga-mais .mais{font-family:var(--f-lapis);font-size:clamp(54px,15vw,76px);line-height:.6;transform:translateY(4px)}
+.vaga-mais .leg{position:absolute;bottom:10%;left:0;right:0;text-align:center;font-family:var(--f-lapis);font-size:clamp(16px,4.3vw,20px)}
+.vaga-mais:hover .mais{color:var(--tinta)}
+.bilhete{grid-column:2;grid-row:1 / span 2;align-self:start;font-family:var(--f-lapis);font-size:clamp(20px,5.4vw,25px);line-height:1.05;color:var(--tinta);transform:rotate(-2deg);padding:6px 4px}
+.bilhete .seta{display:block;font-size:30px;color:var(--lapis);margin-left:-4px}
+
+/* fitinhas das favoritas */
+.fitinhas{position:absolute;bottom:-26px;right:18%;display:flex;gap:7px;z-index:1}
+.fitinha{width:12px;height:44px;background:var(--fita);clip-path:polygon(0 0,100% 0,100% 100%,50% 82%,0 100%);box-shadow:0 2px 3px rgba(0,0,0,.4)}
+.fitinha:nth-child(2){background:#2f5a46}.fitinha:nth-child(3){background:#9a7a2b}
+
+/* ---------- capa ---------- */
+.capa{position:absolute;top:0;right:0;width:var(--pw);height:100%;transform-style:preserve-3d;transform-origin:left center;
+  transition:transform 1.1s cubic-bezier(.55,.02,.25,1);cursor:pointer;z-index:20}
+.capa .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:4px 10px 10px 4px}
+.capa .frente{
+  background:
+    radial-gradient(ellipse 80% 70% at 45% 40%, transparent 50%, rgba(0,0,0,.42)),
+    linear-gradient(90deg, rgba(0,0,0,.45), rgba(255,255,255,.06) 4%, transparent 9%),
+    url("{{IMG:leather}}") center/cover;
+  box-shadow:0 26px 50px rgba(0,0,0,.6), inset 0 0 0 1px rgba(0,0,0,.4);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4%;
+  color:var(--ouro);text-align:center;overflow:hidden
+}
+.capa .frente::before{content:"";position:absolute;inset:7%;border:1.5px solid rgba(207,174,99,.55);border-radius:6px;box-shadow:inset 0 0 0 5px transparent, inset 0 0 0 6px rgba(207,174,99,.25)}
+.capa .frente::after{content:"";position:absolute;left:0;top:0;bottom:0;width:6%;background:linear-gradient(90deg,rgba(0,0,0,.35),transparent)}
+.capa h1{margin:0;font-family:var(--f-capa);font-weight:400;font-size:calc(var(--pw) * .118);line-height:.98;letter-spacing:.01em;
+  color:var(--ouro);text-shadow:0 1px 0 rgba(0,0,0,.6), 0 -1px 0 rgba(255,236,180,.25);text-wrap:balance;max-width:78%}
+.capa .orn{width:38%;height:auto;opacity:.85}
+.capa .vol{font-family:var(--f-capa);font-style:italic;font-size:calc(var(--pw) * .05);opacity:.85}
+.capa .verso{transform:rotateY(180deg);background:url("{{IMG:endpaper}}") center/cover;border-radius:10px 4px 4px 10px;box-shadow:0 18px 40px rgba(0,0,0,.5)}
+.capa .elastico{position:absolute;top:0;bottom:0;right:12%;width:9px;background:linear-gradient(90deg,#1b1210,#3a2a22 50%,#1b1210);box-shadow:0 0 4px rgba(0,0,0,.5);backface-visibility:hidden}
+.dica{font-family:var(--f-capa);font-style:italic;font-size:calc(var(--pw) * .042);color:var(--ouro);opacity:.75;position:absolute;left:0;right:0;bottom:10%;text-align:center;pointer-events:none}
+
+/* estados */
+.palco[data-estado="fechado"] .folhas{visibility:hidden}
+.palco[data-estado="aberto"] .capa,.palco[data-estado="aberto"] .dica{display:none}
+.palco[data-estado="abrindo"] .capa{transform:rotateY(-180deg)}
+.palco[data-estado="abrindo"] .dica{opacity:0}
+@media (min-width:900px) and (min-height:560px){
+  .palco[data-estado="fechado"] .livro{transform:translateX(calc(var(--pw) * -.5))}
+  .palco[data-estado="fechado"] .folhas .pagina:first-child{visibility:hidden}
+}
+@media not ((min-width:900px) and (min-height:560px)){
+  .palco[data-estado="abrindo"] .capa{opacity:0;transition:transform 1.1s cubic-bezier(.55,.02,.25,1), opacity .4s .7s}
+}
+
+/* ---------- atalhos na borda ---------- */
+.borda{display:flex;gap:10px;flex:none}
+@media (min-width:900px) and (min-height:560px){.borda{flex-direction:column;gap:18px}}
+.atalho{display:flex;flex-direction:column;align-items:center;gap:2px;width:86px;padding:8px 4px 6px;border-radius:12px;color:var(--creme);font-size:14px;line-height:1.1}
+.atalho svg{width:38px;height:38px;filter:drop-shadow(0 2px 2px rgba(0,0,0,.5))}
+.atalho:hover{background:rgba(255,230,180,.07)}
+.atalho .contagem{font-size:12px;opacity:.7}
+
+/* ---------- folha sobreposta (painéis) ---------- */
+.veu{position:fixed;inset:0;background:rgba(10,6,3,.55);z-index:50;display:flex;align-items:flex-end;justify-content:center;
+  padding-left:max(0px, env(safe-area-inset-left, 0px));padding-right:max(0px, env(safe-area-inset-right, 0px))}
+.veu[hidden]{display:none!important}
+.folha{
+  position:relative;width:min(100%, 560px);max-height:88dvh;overflow:auto;box-sizing:border-box;
+  background:url("{{IMG:paper}}") center/cover;color:var(--tinta);
+  border-radius:14px 14px 0 0;padding:20px max(18px, env(safe-area-inset-left,0px)) calc(22px + env(safe-area-inset-bottom,0px));
+  box-shadow:0 -10px 40px rgba(0,0,0,.5);animation:sobe .28s cubic-bezier(.2,.8,.3,1)
+}
+@media (min-width:700px){.veu{align-items:center}.folha{border-radius:6px;max-height:86dvh;padding:26px 30px}}
+@keyframes sobe{from{transform:translateY(40px);opacity:0}}
+.fechar{position:absolute;top:8px;right:10px;width:40px;height:40px;font-family:var(--f-lapis);font-size:34px;line-height:1;color:var(--lapis)}
+.folha h2{margin:0 40px 2px 0;font-family:var(--f-capa);font-weight:400;font-size:28px;line-height:1.05;text-wrap:balance}
+.folha .sub{margin:0 0 14px;color:var(--lapis);font-size:16px}
+.folha p{font-size:17px;line-height:1.45;max-width:60ch}
+.folha h3{font-family:var(--f-capa);font-style:italic;font-weight:400;font-size:20px;margin:18px 0 6px}
+.acoes{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:var(--tinta);color:#f3ead6;font-size:16px;text-decoration:none;line-height:1.1}
+.btn.claro{background:transparent;color:var(--tinta);box-shadow:inset 0 0 0 1.5px var(--tinta)}
+.btn.perigo{background:var(--carimbo)}
+.aviso{font-family:var(--f-lapis);font-size:21px;color:var(--lapis);line-height:1.1}
+.exemplo{display:inline-block;font-size:13px;color:var(--carimbo);border:1px dashed var(--carimbo);padding:1px 8px;border-radius:10px;margin-bottom:8px}
+
+/* galeria */
+.galeria{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding:10px 4px 18px;margin:0 -4px}
+.galeria figure{flex:0 0 min(78%, 340px);scroll-snap-align:center;margin:0;background:#f8f5ee;padding:10px 10px 0;box-shadow:0 6px 16px rgba(0,0,0,.3)}
+.galeria figure:nth-child(odd){transform:rotate(-1.2deg)}.galeria figure:nth-child(even){transform:rotate(1deg)}
+.galeria img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
+.galeria figcaption{font-size:17px;padding:10px 4px 14px;min-height:2.4em;line-height:1.2}
+
+/* detalhes */
+.notas{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:center;font-size:16px}
+.notas .estrelas button{width:20px;height:20px}
+.ficha{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);gap:4px 14px;font-size:16px;margin:0}
+.ficha dt{color:var(--lapis)}.ficha dd{margin:0}
+.como-foi{font-size:18px;line-height:1.4;background:repeating-linear-gradient(180deg,transparent 0 24px,rgba(36,48,74,.13) 24px 25px);padding-top:1px}
+.visitas{font-size:15px;color:var(--lapis);margin-top:8px}
+.selo-fav{display:inline-flex;align-items:center;gap:6px}
+.selo-fav .fitinha{height:26px;width:10px}
+.confirmar{margin-top:10px;padding:12px;border:1.5px dashed var(--carimbo);border-radius:8px;font-size:16px}
+
+/* adicionar */
+.campo{display:flex;flex-direction:column;gap:4px;margin:12px 0}
+.campo label{font-size:15px;color:var(--lapis)}
+.campo input{font:inherit;font-size:19px;color:var(--tinta);background:transparent;border:0;border-bottom:1.5px solid var(--lapis);padding:6px 2px;outline:none}
+.campo input:focus{border-bottom-color:var(--tinta)}
+.sugestoes{list-style:none;margin:2px 0 0;padding:0;display:flex;flex-direction:column}
+.sugestoes button{width:100%;text-align:left;padding:8px 4px;font-size:17px;border-bottom:1px dashed rgba(36,48,74,.2)}
+.sugestoes small{color:var(--lapis);margin-left:6px}
+.sugestoes .nova{color:var(--carimbo)}
+.escolhida{font-size:18px;padding:8px 10px;border-radius:8px;background:rgba(36,48,74,.08);display:flex;justify-content:space-between;gap:8px;align-items:center}
+.fotos-prev{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.fotos-prev img{width:64px;height:64px;object-fit:cover;border:4px solid #f8f5ee;box-shadow:0 2px 5px rgba(0,0,0,.25)}
+.arquivo{font-size:16px}
+
+/* broches */
+.faixa{position:relative;margin:10px -8px 6px;padding:22px 16px 26px;
+  background:
+    repeating-linear-gradient(45deg, rgba(255,255,255,.05) 0 2px, transparent 2px 5px),
+    repeating-linear-gradient(-45deg, rgba(0,0,0,.08) 0 2px, transparent 2px 5px),
+    #5c5a37;
+  box-shadow:inset 0 6px 0 -3px #7a7748, inset 0 -6px 0 -3px #45432a, 0 6px 14px rgba(0,0,0,.25);border-radius:4px;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:16px 8px}
+.broche{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;font-size:13px;line-height:1.1;color:#f1e9d2}
+.broche svg{width:58px;height:58px;filter:drop-shadow(0 3px 2px rgba(0,0,0,.45))}
+.broche.trancado{color:#d9d3b8;opacity:.75}
+.broche.trancado svg{filter:none}
+.broche .prog{font-size:12px;opacity:.85}
+
+/* busca */
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px}
+.chip{flex:none;padding:6px 12px;border-radius:999px;font-size:15px;box-shadow:inset 0 0 0 1.5px rgba(36,48,74,.45)}
+.chip[aria-pressed="true"]{background:var(--tinta);color:#f3ead6;box-shadow:none}
+.lista{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.lista li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;padding:10px 0;border-bottom:1px dashed rgba(36,48,74,.25)}
+.lista .n{font-weight:700;font-size:17px}
+.lista .l{color:var(--lapis);font-size:14px;grid-column:1}
+.lista .m{grid-column:1;font-size:14px;display:flex;flex-wrap:wrap;gap:4px 12px}
+.lista .d{font-variant-numeric:tabular-nums;font-size:15px;text-align:right}
+.lista .acao{grid-column:2;grid-row:2 / span 2;align-self:center}
+.lista .acao button{font-size:14px;padding:6px 10px;border-radius:999px;box-shadow:inset 0 0 0 1.5px var(--tinta)}
+.lista .acao button[disabled]{opacity:.5;box-shadow:none}
+
+/* configurações */
+.opcao{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px dashed rgba(36,48,74,.2);font-size:17px}
+.chave{width:48px;height:28px;border-radius:999px;background:rgba(36,48,74,.25);position:relative;flex:none}
+.chave::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#f8f5ee;transition:transform .2s}
+.chave[aria-checked="true"]{background:var(--tinta)}.chave[aria-checked="true"]::after{transform:translateX(20px)}
+.creditos{font-size:13px;line-height:1.35;color:var(--lapis);font-family:system-ui,sans-serif}
+.creditos a{color:inherit}
+
+.aviso-topo{position:fixed;left:50%;top:calc(12px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:80;
+  background:#f3ead6;color:var(--tinta);padding:8px 16px;border-radius:999px;font-size:16px;box-shadow:0 6px 20px rgba(0,0,0,.4);max-width:calc(100vw - 32px);text-align:center}
+.aviso-topo[hidden]{display:none!important}
+
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+@media (prefers-reduced-motion:reduce){
+  .livro,.capa,.pola{transition:none!important}
+  .folha{animation:none}
+}
+</style>
+
+<main class="mesa">
+  <div class="palco" id="palco" data-estado="fechado">
+    <div class="livro" id="livro">
+      <div class="folhas" id="folhas"></div>
+      <div class="capa" id="capa" role="button" tabindex="0" aria-label="Abrir o diário">
+        <div class="face frente">
+          <svg class="orn" viewBox="0 0 120 24" aria-hidden="true"><path d="M2 12h40M78 12h40M60 3c-6 6-6 12 0 18 6-6 6-12 0-18z" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="48" cy="12" r="2" fill="currentColor"/><circle cx="72" cy="12" r="2" fill="currentColor"/></svg>
+          <h1>Diário das Cachoeiras</h1>
+          <svg class="orn" viewBox="0 0 120 24" aria-hidden="true"><path d="M2 12h44M74 12h44" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M52 8c3 4 5 4 8 0s5-4 8 0M52 15c3 4 5 4 8 0s5-4 8 0" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>
+          <div class="vol">Volume I</div>
+          <div class="elastico"></div>
+          <div class="dica" id="dica">toque para abrir</div>
+        </div>
+        <div class="face verso"></div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="borda" aria-label="Atalhos">
+    <button class="atalho" data-abrir="busca">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="17" cy="17" r="10" fill="rgba(210,230,240,.18)" stroke="#d8c08a" stroke-width="3"/><path d="M24.5 24.5l9 9" stroke="#6b4a2a" stroke-width="5" stroke-linecap="round"/><path d="M12 14c2-3 5-4 8-3" stroke="#fff" stroke-opacity=".5" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
+      Buscar
+    </button>
+    <button class="atalho" data-abrir="broches">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="14" fill="#2f5a46" stroke="#cfae63" stroke-width="3"/><path d="M20 10c-4 6-6 9-6 12a6 6 0 0012 0c0-3-2-6-6-12z" fill="#a9d4e4"/></svg>
+      Broches
+      <span class="contagem" id="contagem-broches"></span>
+    </button>
+    <button class="atalho" data-abrir="config">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><g fill="#bfa77a" stroke="#6b5532" stroke-width="1.2"><path d="M18 4h4l1 5 4 2 4-3 3 3-3 4 2 4 5 1v4l-5 1-2 4 3 4-3 3-4-3-4 2-1 5h-4l-1-5-4-2-4 3-3-3 3-4-2-4-5-1v-4l5-1 2-4-3-4 3-3 4 3 4-2z"/></g><circle cx="20" cy="20" r="5" fill="#2a1a10"/></svg>
+      Ajustes
+    </button>
+  </nav>
+
+  <div class="veu" id="veu" hidden>
+    <section class="folha" id="folha" role="dialog" aria-modal="true" aria-labelledby="folha-titulo">
+      <button class="fechar" id="fechar" aria-label="Fechar">×</button>
+      <div id="folha-conteudo"></div>
+    </section>
+  </div>
+  <div class="aviso-topo" id="aviso" role="status" hidden></div>
+</main>
+
+<script>
+const IMG = {{IMGS_JSON}};
+const CREDITOS = {{CREDITOS_JSON}};
+
+/* ---------------- dados de exemplo ---------------- */
+let entradas = [
+  {id:1,nome:'Cachoeira do Tomé',lugar:'Serra do Cipó, MG',data:'2025-01-12',nota:5,fotos:['tome','cipo'],
+   legendas:['O poço do Tomé. Água gelada!','Subindo o rio depois do almoço'],verificada:true,fav:true,
+   sub:{Segurança:4,Movimento:3,Banho:5,Trilha:4,Beleza:5},
+   comoFoi:'Saímos de BH ainda de madrugada e chegamos às 6h40, sem ninguém. A água estava gelada, mas o poço é perfeito para nadar. Voltaria amanhã.',
+   ficha:{'Com quem':'Ana, Léo e Rafa','Trilha':'Fácil','Caminhada':'25 min','Dá para nadar':'Sim','Água':'Gelada','Paga':'Não','Estacionar':'Na estrada, perto da ponte','Movimento':'Vazia'},visitas:2},
+  {id:2,nome:'Cachoeira dos Cristais',lugar:'Biribiri, Diamantina, MG',data:'2025-03-08',nota:4,fotos:['cristais','farofa','veadinhos'],
+   legendas:['A queda vista do poço','Outra queda no caminho','Fim de tarde no rio'],verificada:true,fav:false,
+   sub:{Segurança:5,Movimento:4,Banho:4,Trilha:3,Beleza:5},
+   comoFoi:'Estrada de terra até a vila de Biribiri. A trilha é curta e a água é cor de chá.',
+   ficha:{'Com quem':'Ana','Trilha':'Fácil','Caminhada':'15 min','Dá para nadar':'Sim','Água':'Fria','Paga':'Não','Estacionar':'Na vila','Movimento':'Cheia no fim de semana'},visitas:1},
+  {id:3,nome:'Cachoeira do Mosquito',lugar:'Chapada Diamantina, BA',data:'2025-04-19',nota:5,fotos:['mosquito','piabinha'],
+   legendas:['A parede de pedra listrada','A água descendo nas pedras'],verificada:true,fav:true,
+   sub:{Segurança:4,Movimento:4,Banho:4,Trilha:4,Beleza:5},
+   comoFoi:'Feriado de Páscoa. A queda é alta e a pedra parece pintada.',
+   ficha:{'Com quem':'Léo e Rafa','Trilha':'Média','Caminhada':'40 min','Dá para nadar':'Sim','Água':'Fria','Paga':'Sim, R$ 20','Estacionar':'Na fazenda','Movimento':'Média'},visitas:1},
+  {id:4,nome:'Cachoeira São Francisco',lugar:'Serra da Canastra, MG',data:'2025-06-14',nota:4,fotos:['saofrancisco','15quedas'],
+   legendas:['Os degraus de pedra','Mais abaixo no rio'],verificada:false,fav:false,
+   sub:{Segurança:3,Movimento:5,Banho:2,Trilha:2,Beleza:4},
+   comoFoi:'Fui em 2019, registrei de memória. Lembro do frio de junho e do pão de queijo na volta.',
+   ficha:{'Com quem':'Família','Trilha':'Difícil','Caminhada':'1h20','Dá para nadar':'Não','Água':'Muito gelada','Paga':'Não','Estacionar':'Na estrada de terra','Movimento':'Vazia'},visitas:1},
+  {id:5,nome:'Cachoeira de Ibitipoca',lugar:'Lima Duarte, MG',data:'2025-09-03',nota:3,fotos:['ibitipoca','itatiaia','barao'],
+   legendas:['A queda no meio da mata','O cânion da trilha','Uma prainha de pedra'],verificada:true,fav:false,
+   sub:{Segurança:4,Movimento:2,Banho:3,Trilha:4,Beleza:4},
+   comoFoi:'Bonita, mas estava lotada no feriado. Vale ir em dia de semana.',
+   ficha:{'Com quem':'Rafa','Trilha':'Média','Caminhada':'1h','Dá para nadar':'Pouco','Água':'Fria','Paga':'Sim, entrada do parque','Estacionar':'No parque','Movimento':'Lotada'},visitas:1},
+];
+let queroIr = [
+  {nome:'Cachoeira do Tabuleiro',lugar:'Conceição do Mato Dentro, MG',quando:'20 de dezembro'},
+  {nome:'Cachoeira da Fumaça',lugar:'Chapada Diamantina, BA'},
+  {nome:'Cachoeira Santa Bárbara',lugar:'Cavalcante, GO',quando:'janeiro'},
+];
+const PERTO = [
+  {nome:'Cachoeira Grande',lugar:'Serra do Cipó, MG',km:96,nota:4.6,seg:4.4,mov:'muito',nadar:true,gratis:true,n:18},
+  {nome:'Cachoeira do Tomé',lugar:'Serra do Cipó, MG',km:101,nota:4.8,seg:4.2,mov:'médio',nadar:true,gratis:true,n:11},
+  {nome:'Cachoeira da Farofa',lugar:'Serra do Cipó, MG',km:112,nota:4.5,seg:3.6,mov:'pouco',nadar:true,gratis:false,n:7},
+  {nome:'Cachoeira do Tabuleiro',lugar:'Conceição do Mato Dentro, MG',km:165,nota:4.9,seg:3.9,mov:'médio',nadar:true,gratis:false,n:9},
+  {nome:'Cachoeira dos Cristais',lugar:'Biribiri, Diamantina, MG',km:288,nota:4.4,seg:4.7,mov:'médio',nadar:true,gratis:true,n:5},
+  {nome:'Cachoeira Casca d’Anta',lugar:'Serra da Canastra, MG',km:322,nota:null,seg:null,mov:null,nadar:false,gratis:false,n:2},
+];
+const SUGESTOES = [
+  ['Cachoeira da Fumaça','Chapada Diamantina, BA'],['Cachoeira do Tabuleiro','Conceição do Mato Dentro, MG'],
+  ['Cachoeira Santa Bárbara','Cavalcante, GO'],['Cachoeira do Buracão','Ibicoara, BA'],
+  ['Cachoeira Casca d’Anta','Serra da Canastra, MG'],['Cachoeira Grande','Serra do Cipó, MG'],
+  ['Cachoeira da Farofa','Serra do Cipó, MG'],['Cachoeira Véu da Noiva','Serra do Cipó, MG'],
+  ['Cachoeira dos Cristais','Biribiri, Diamantina, MG'],['Cachoeira do Tomé','Serra do Cipó, MG'],
+];
+const BROCHES = [
+  {nome:'Primeira cachoeira',cor:'#2f5a46',icone:'gota',ganho:true},
+  {nome:'Madrugador',cor:'#c4682e',icone:'sol',ganho:true},
+  {nome:'5 cachoeiras',cor:'#24304a',icone:'5',prog:'4 de 5'},
+  {nome:'10 cachoeiras',cor:'#24304a',icone:'10',prog:'4 de 10'},
+  {nome:'3 estados',cor:'#7a2f2a',icone:'mapa',prog:'2 de 3'},
+  {nome:'Trilha difícil',cor:'#5a4a2a',icone:'monte'},
+  {nome:'Mais de 50 m',cor:'#2a5a6a',icone:'seta'},
+  {nome:'Mergulho no inverno',cor:'#3a5f8a',icone:'neve'},
+  {nome:'Quatro estações',cor:'#6a7a2a',icone:'folha',prog:'2 de 4'},
+  {nome:'Fiel',cor:'#8c2f2a',icone:'coracao',prog:'2 de 3'},
+  {nome:'Desbravador',cor:'#4a3a6a',icone:'bussola'},
+  {nome:'100 fotos',cor:'#2a2a2a',icone:'camera',prog:'12 de 100'},
+  {nome:'Volume completo',cor:'#6a4a2a',icone:'livro',prog:'5 de 60'},
+];
+
+/* ---------------- utilidades ---------------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fotoSrc = f => IMG[f] || f;
+const fmtData = iso => { const [y,m,d] = iso.split('-'); return `${d}/${m}/${y.slice(2)}`; };
+const fmtDataLonga = iso => new Date(iso+'T12:00').toLocaleDateString('pt-BR',{day:'numeric',month:'long',year:'numeric'});
+const largo = matchMedia('(min-width:900px) and (min-height:560px)');
+const reduzir = matchMedia('(prefers-reduced-motion: reduce)');
+let sons = true, idx = 1, prox = 6;
+const POR_PAG = 6;
+
+function aviso(txt){ const a=$('#aviso'); a.textContent=txt; a.hidden=false; clearTimeout(aviso.t); aviso.t=setTimeout(()=>a.hidden=true,2600); }
+
+/* som de papel: ruído curto e filtrado */
+let ac;
+function somPapel(dur=.22){
+  if(!sons) return;
+  try{
+    ac = ac || new (window.AudioContext||window.webkitAudioContext)();
+    const n = ac.createBuffer(1, ac.sampleRate*dur, ac.sampleRate), d = n.getChannelData(0);
+    for(let i=0;i<d.length;i++){ const t=i/d.length; d[i]=(Math.random()*2-1)*Math.pow(1-t,2)*(.4+.6*Math.sin(t*Math.PI)); }
+    const s=ac.createBufferSource(); s.buffer=n;
+    const f=ac.createBiquadFilter(); f.type='bandpass'; f.frequency.value=2400; f.Q.value=.6;
+    const g=ac.createGain(); g.gain.value=.35;
+    s.connect(f).connect(g).connect(ac.destination); s.start();
+  }catch(e){}
+}
+
+/* ---------------- desenho ---------------- */
+const estrelaPath = 'M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z';
+function estrelasHTML(nota, id, campo='nota', tamanho=''){
+  let h = `<div class="estrelas" role="group" aria-label="Avaliação: ${nota} de 5">`;
+  for(let i=1;i<=5;i++) h += `<button class="${i<=nota?'on':'off'}" data-estrela="${i}" data-id="${id}" data-campo="${campo}" aria-label="${i} estrela${i>1?'s':''}"><svg viewBox="0 0 24 24"><path d="${estrelaPath}" stroke-width="1.2" stroke-linejoin="round"/></svg></button>`;
+  return h + '</div>';
+}
+
+function bordaLapis(){
+  // retângulo "à mão": cantos levemente tortos
+  const j = () => (Math.random()*2-1).toFixed(1);
+  return `<svg class="borda" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M${2+ +j()} ${2+ +j()} L${98+ +j()} ${3+ +j()} L${97+ +j()} ${98+ +j()} L${3+ +j()} ${97+ +j()} Z" fill="none" stroke="#6d675e" stroke-width="1.6" stroke-dasharray="4 3.2" vector-effect="non-scaling-stroke" stroke-linecap="round" opacity=".85"/></svg>`;
+}
+
+function vagaHTML(e){
+  // camadas da pilha, de cima para baixo: rotação e deslocamento de cada polaroid
+  const camadas = [['-3deg','0%','0%'],['8deg','16%','-5%'],['-11deg','-15%','6%']];
+  const fotos = e.fotos.slice(0,3);
+  const pilha = fotos.map((f,i)=>{ const [r,dx,dy]=camadas[i]; return `<div class="pola" style="--r:${r};--dx:${dx};--dy:${dy}"><img src="${fotoSrc(f)}" alt="" loading="lazy"></div>`; }).reverse().join('');
+  const carimbo = e.verificada
+    ? `<div class="carimbo" aria-hidden="true">VISITADO<br>${fmtData(e.data)}<br>✓</div>`
+    : `<div class="carimbo memoria" aria-hidden="true">DE<br>MEMÓRIA</div>`;
+  return `<article class="vaga" data-id="${e.id}">
+    <button class="cab" data-acao="rota" data-id="${e.id}" aria-label="Rota até ${esc(e.nome)}">
+      <span class="nome">${esc(e.nome)}</span><span class="data">${fmtData(e.data)}</span>
+    </button>
+    <button class="pilha" data-acao="galeria" data-id="${e.id}" aria-label="Ver as ${e.fotos.length} fotos">
+      ${e.fotos.length ? pilha : '<span class="aviso">sem fotos ainda</span>'}
+      ${e.fotos.length>1?`<span class="qtd-fotos">${e.fotos.length} fotos</span>`:''}
+    </button>
+    ${carimbo}
+    ${estrelasHTML(e.nota, e.id)}
+    <button class="detalhes-btn" data-acao="detalhes" data-id="${e.id}">detalhes</button>
+  </article>`;
+}
+
+function maisHTML(primeira){
+  return `<div class="vaga"><button class="vaga-mais" data-acao="adicionar" aria-label="Adicionar cachoeira">${bordaLapis()}<span class="mais">+</span><span class="leg">nova cachoeira</span></button></div>` +
+    (primeira ? `<div class="bilhete">Este é o seu diário.<span class="seta">↙</span>Toque no + para guardar a primeira cachoeira. Cada página guarda seis.</div>` : '');
+}
+
+/* páginas: 0 = contracapa, depois as páginas do diário */
+function totalPaginasDiario(){ return Math.floor(entradas.length / POR_PAG) + 1; }
+function paginaHTML(i, lado){
+  const totalDiario = totalPaginasDiario();
+  if(i === 0){
+    const itens = queroIr.length
+      ? queroIr.map(q=>`<div class="postit"><b>${esc(q.nome)}</b><small>${esc(q.lugar)}</small>${q.quando?`<span class="quando">pretendo ir: ${esc(q.quando)}</span>`:''}</div>`).join('')
+      : `<p class="mural-vazio">Os lugares que você quer conhecer ficam colados aqui. Use a busca e toque em "quero ir".</p>`;
+    return `<div class="pagina contracapa ${lado}"><div class="mural-titulo">Quero ir</div><div class="postits">${itens}</div></div>`;
+  }
+  if(i > totalDiario) return `<div class="pagina vazia ${lado}"></div>`;
+  const ini = (i-1)*POR_PAG, doPag = entradas.slice(ini, ini+POR_PAG);
+  let grade = doPag.map(vagaHTML).join('');
+  if(doPag.length < POR_PAG) grade += maisHTML(entradas.length===0);
+  const fitas = entradas.filter(e=>e.fav).slice(0,5);
+  const fitinhas = (i===1 && fitas.length) ? `<div class="fitinhas" aria-hidden="true">${fitas.map(()=>'<span class="fitinha"></span>').join('')}</div>` : '';
+  return `<div class="pagina ${lado}" data-pag="${i}">
+    <div class="cab-pag"><span>${i===1?'Volume I':''}</span></div>
+    <div class="grade">${grade}</div>
+    <div class="num-pag">— ${i} —</div>
+    ${fitinhas}
+  </div>`;
+}
+
+function render(){
+  const total = totalPaginasDiario();
+  const f = $('#folhas');
+  if(largo.matches){
+    if(idx % 2) idx -= 1;                 // em tela grande o índice aponta para a página esquerda
+    f.innerHTML = paginaHTML(idx,'esq') + paginaHTML(idx+1,'dir');
+    const pags = f.querySelectorAll('.pagina');
+    pags[0].insertAdjacentHTML('beforeend', `<button class="virar ant" data-virar="-1" aria-label="Página anterior" ${idx<=0?'disabled':''}>‹</button>`);
+    pags[1].insertAdjacentHTML('beforeend', `<button class="virar prox" data-virar="1" aria-label="Próxima página" ${idx+1>=total?'disabled':''}>›</button>`);
+  } else {
+    f.innerHTML = paginaHTML(idx,'');
+    const p = f.querySelector('.pagina');
+    p.insertAdjacentHTML('beforeend', `<button class="virar ant" data-virar="-1" aria-label="Página anterior" ${idx<=0?'disabled':''}>‹</button><button class="virar prox" data-virar="1" aria-label="Próxima página" ${idx>=total?'disabled':''}>›</button>`);
+  }
+  const ganhos = BROCHES.filter(b=>b.ganho).length;
+  $('#contagem-broches').textContent = `${ganhos} de ${BROCHES.length}`;
+}
+
+/* virar página */
+let virando = false;
+function virar(dir){
+  const total = totalPaginasDiario();
+  const passo = largo.matches ? 2 : 1;
+  const novo = idx + dir*passo;
+  if(novo < 0 || (largo.matches ? novo > total : novo > total) || virando) return;
+  if(largo.matches && novo > total) return;
+  somPapel();
+  if(reduzir.matches){ idx = novo; render(); return; }
+  virando = true;
+  const f = $('#folhas');
+  const alvo = largo.matches ? f.querySelectorAll('.pagina')[dir>0?1:0] : f.querySelector('.pagina');
+  const origem = dir>0 ? 'left center' : 'right center';
+  alvo.style.transformOrigin = largo.matches ? (dir>0?'left center':'right center') : origem;
+  const a = alvo.animate([{transform:'rotateY(0)'},{transform:`rotateY(${dir>0?-90:90}deg)`,filter:'brightness(.7)'}],{duration:260,easing:'ease-in'});
+  a.onfinish = () => {
+    idx = novo; render();
+    const n = largo.matches ? $('#folhas').querySelectorAll('.pagina')[dir>0?0:1] : $('#folhas').querySelector('.pagina');
+    n.style.transformOrigin = largo.matches ? (dir>0?'right center':'left center') : (dir>0?'right center':'left center');
+    const b = n.animate([{transform:`rotateY(${dir>0?90:-90}deg)`,filter:'brightness(.7)'},{transform:'rotateY(0)'}],{duration:280,easing:'ease-out'});
+    b.onfinish = () => { virando = false; };
+  };
+}
+
+/* abrir e fechar o livro */
+function abrir(){
+  const p = $('#palco');
+  if(p.dataset.estado !== 'fechado') return;
+  idx = largo.matches ? 0 : 1;
+  render();
+  p.dataset.estado = 'abrindo';
+  somPapel(.4);
+  setTimeout(()=>{ p.dataset.estado = 'aberto'; }, reduzir.matches ? 0 : 1150);
+}
+function fecharLivro(){ const p=$('#palco'); p.dataset.estado='fechado'; idx = 1; }
+
+/* ---------------- painéis ---------------- */
+let ultimoFoco;
+function painel(html){
+  ultimoFoco = document.activeElement;
+  $('#folha-conteudo').innerHTML = html;
+  $('#veu').hidden = false;
+  $('#folha').scrollTop = 0;
+  setTimeout(()=>$('#fechar').focus(), 30);
+}
+function fecharPainel(){ $('#veu').hidden = true; ultimoFoco && ultimoFoco.focus && ultimoFoco.focus(); }
+const achar = id => entradas.find(e=>e.id==id);
+
+function painelRota(e){
+  const q = encodeURIComponent(`${e.nome}, ${e.lugar}`);
+  if(e.nova){
+    painel(`<h2 id="folha-titulo">${esc(e.nome)}</h2><p class="sub">Cadastrada por você</p>
+      <p>Esta cachoeira não está no mapa, então o app não consegue traçar a rota até ela.</p>`);
+    return;
+  }
+  painel(`<h2 id="folha-titulo">${esc(e.nome)}</h2><p class="sub">${esc(e.lugar)}</p>
+    <p>Abra a rota no aplicativo de mapas que você usa:</p>
+    <div class="acoes">
+      <a class="btn" href="https://www.google.com/maps/dir/?api=1&destination=${q}" target="_blank" rel="noopener">Abrir no Google Maps</a>
+      <a class="btn claro" href="https://waze.com/ul?q=${q}&navigate=yes" target="_blank" rel="noopener">Abrir no Waze</a>
+    </div>`);
+}
+
+function painelGaleria(e){
+  if(!e.fotos.length){ painel(`<h2 id="folha-titulo">${esc(e.nome)}</h2><p>Nenhuma foto guardada ainda. Você pode adicionar até 10.</p>`); return; }
+  painel(`<h2 id="folha-titulo">${esc(e.nome)}</h2><p class="sub">${e.fotos.length} de 10 fotos · deslize para o lado</p>
+    <div class="galeria">${e.fotos.map((f,i)=>`<figure><img src="${fotoSrc(f)}" alt="${esc(e.legendas?.[i]||'Foto da cachoeira')}"><figcaption>${esc(e.legendas?.[i]||'')}</figcaption></figure>`).join('')}</div>`);
+}
+
+function painelDetalhes(e){
+  const subs = Object.entries(e.sub||{}).map(([k,v])=>`<span>${k}</span>${estrelasHTML(v,e.id,'sub:'+k)}`).join('');
+  const ficha = Object.entries(e.ficha||{}).map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('');
+  painel(`<h2 id="folha-titulo">${esc(e.nome)}</h2>
+    <p class="sub">${esc(e.lugar)} · ${fmtDataLonga(e.data)} · ${e.verificada?'check-in verificado':'registrada de memória'}</p>
+    <div class="notas"><span>Geral</span>${estrelasHTML(e.nota,e.id)}${subs}</div>
+    ${e.comoFoi?`<h3>Como foi</h3><p class="como-foi">${esc(e.comoFoi)}</p>`:''}
+    ${ficha?`<h3>Ficha da visita</h3><dl class="ficha">${ficha}</dl>`:''}
+    ${e.visitas>1?`<p class="visitas">Você já esteve aqui ${e.visitas} vezes.</p>`:''}
+    <div class="acoes">
+      <button class="btn claro selo-fav" data-acao="fav" data-id="${e.id}"><span class="fitinha"></span>${e.fav?'Tirar das favoritas':'Marcar como favorita'}</button>
+      <button class="btn claro" data-acao="apagar" data-id="${e.id}">Apagar do diário</button>
+    </div>
+    <div id="confirmar"></div>`);
+}
+
+/* adicionar */
+let novo = null;
+function painelAdicionar(){
+  novo = {nome:'',lugar:'',data:new Date().toISOString().slice(0,10),fotos:[],nota:0,novaCadastrada:false};
+  painel(`<h2 id="folha-titulo">Nova cachoeira</h2><p class="sub">Só o nome e a data são obrigatórios. O resto dá para completar depois.</p>
+    <div class="campo"><label for="busca-nome">Nome da cachoeira</label>
+      <input id="busca-nome" autocomplete="off" placeholder="Comece a digitar…">
+      <ul class="sugestoes" id="sugestoes"></ul>
+      <div id="escolhida"></div></div>
+    <div class="campo"><label for="data-visita">Data da visita</label><input id="data-visita" type="date" value="${novo.data}"></div>
+    <div class="campo"><label for="fotos-visita">Fotos (até 10, as melhores)</label>
+      <input id="fotos-visita" class="arquivo" type="file" accept="image/*" multiple><div class="fotos-prev" id="fotos-prev"></div></div>
+    <div class="campo"><label>Sua nota</label><div id="nota-nova">${estrelasHTML(0,'novo')}</div></div>
+    <div class="acoes"><button class="btn" id="guardar" data-acao="guardar">Guardar no diário</button></div>
+    <p class="aviso" id="erro-novo" hidden></p>`);
+}
+function atualizarSugestoes(txt){
+  const ul = $('#sugestoes'); if(!ul) return;
+  const t = txt.trim().toLowerCase();
+  if(!t){ ul.innerHTML=''; return; }
+  const sem = s => s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+  const achadas = SUGESTOES.filter(([n,l]) => sem(n+' '+l).includes(sem(t))).slice(0,5);
+  ul.innerHTML = achadas.map(([n,l])=>`<li><button data-acao="escolher" data-nome="${esc(n)}" data-lugar="${esc(l)}">${esc(n)}<small>${esc(l)}</small></button></li>`).join('')
+    + `<li><button class="nova" data-acao="escolher" data-nome="${esc(txt.trim())}" data-lugar="" data-nova="1">Cadastrar “${esc(txt.trim())}” como nova</button></li>`;
+}
+function guardar(){
+  const err = $('#erro-novo');
+  novo.data = $('#data-visita').value || novo.data;
+  if(!novo.nome){ err.hidden=false; err.textContent='Escolha uma cachoeira da lista ou cadastre uma nova.'; $('#busca-nome').focus(); return; }
+  const e = {id:prox++,nome:novo.nome,lugar:novo.lugar||'Cadastrada por você',data:novo.data,nota:novo.nota,fotos:novo.fotos.slice(0,10),legendas:[],
+    verificada:false,fav:false,sub:{},ficha:{},visitas:1,nova:novo.novaCadastrada};
+  entradas.push(e);
+  fecharPainel();
+  const pag = Math.ceil(entradas.length / POR_PAG);
+  idx = largo.matches ? (pag % 2 ? pag-1 : pag) : pag;
+  render(); somPapel(.3);
+  const el = document.querySelector(`.vaga[data-id="${e.id}"]`);
+  el && !reduzir.matches && el.animate([{transform:'translateY(-30px) rotate(-4deg)',opacity:0},{transform:'none',opacity:1}],{duration:420,easing:'cubic-bezier(.2,.8,.3,1.2)'});
+  aviso(entradas.length % POR_PAG === 0 ? 'Página cheia. O + passou para a próxima página.' : 'Guardada no diário.');
+}
+
+/* broches */
+function iconeBroche(t){
+  const c = '#f4ead0';
+  return ({
+    gota:`<path d="M30 15c-6 9-9 13-9 17a9 9 0 0018 0c0-4-3-8-9-17z" fill="#a9d4e4"/>`,
+    sol:`<circle cx="30" cy="34" r="7" fill="#f6c453"/><path d="M18 40h24M30 20v5M21 25l3 3M39 25l-3 3" stroke="${c}" stroke-width="2.4" stroke-linecap="round"/>`,
+    '5':`<text x="30" y="38" text-anchor="middle" font-family="Georgia,serif" font-size="20" fill="${c}">5</text>`,
+    '10':`<text x="30" y="37" text-anchor="middle" font-family="Georgia,serif" font-size="17" fill="${c}">10</text>`,
+    mapa:`<path d="M19 22l7-3 8 3 7-3v19l-7 3-8-3-7 3z" fill="none" stroke="${c}" stroke-width="2"/><path d="M26 19v19M34 22v19" stroke="${c}" stroke-width="1.6"/>`,
+    monte:`<path d="M16 40l10-16 6 9 4-5 8 12z" fill="${c}"/>`,
+    seta:`<path d="M30 17v24M23 34l7 7 7-7" fill="none" stroke="${c}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>`,
+    neve:`<path d="M30 18v24M20 24l20 12M40 24L20 36" stroke="${c}" stroke-width="2.4" stroke-linecap="round"/>`,
+    folha:`<path d="M20 40c0-14 8-20 20-21-1 12-7 20-20 21zM20 40l12-12" fill="none" stroke="${c}" stroke-width="2.2" stroke-linecap="round"/>`,
+    coracao:`<path d="M30 41s-11-7-11-14a6 6 0 0111-3 6 6 0 0111 3c0 7-11 14-11 14z" fill="${c}"/>`,
+    bussola:`<circle cx="30" cy="30" r="10" fill="none" stroke="${c}" stroke-width="2"/><path d="M30 22l3 8-3 8-3-8z" fill="${c}"/>`,
+    camera:`<rect x="19" y="24" width="22" height="15" rx="2" fill="none" stroke="${c}" stroke-width="2"/><circle cx="30" cy="31.5" r="4" fill="none" stroke="${c}" stroke-width="2"/><path d="M25 24l2-3h6l2 3" fill="none" stroke="${c}" stroke-width="2"/>`,
+    livro:`<path d="M19 21h9a3 3 0 013 3v16a3 3 0 00-3-3h-9zM41 21h-9a3 3 0 00-3 3" fill="none" stroke="${c}" stroke-width="2"/>`,
+  })[t] || '';
+}
+function painelBroches(){
+  const pins = BROCHES.map(b => b.ganho
+    ? `<div class="broche"><svg viewBox="0 0 60 60" aria-hidden="true"><circle cx="30" cy="30" r="26" fill="#b99a52"/><circle cx="30" cy="30" r="23" fill="${b.cor}"/><circle cx="30" cy="30" r="23" fill="url(#brilho)"/>${iconeBroche(b.icone)}</svg>${esc(b.nome)}</div>`
+    : `<div class="broche trancado"><svg viewBox="0 0 60 60" aria-hidden="true"><circle cx="30" cy="30" r="24" fill="none" stroke="#d9d3b8" stroke-width="1.6" stroke-dasharray="4 3"/><g opacity=".55">${iconeBroche(b.icone)}</g></svg>${esc(b.nome)}${b.prog?`<span class="prog">${b.prog}</span>`:''}</div>`
+  ).join('');
+  painel(`<svg width="0" height="0" style="position:absolute"><defs><radialGradient id="brilho" cx="35%" cy="30%" r="70%"><stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/></radialGradient></defs></svg>
+    <h2 id="folha-titulo">Seus broches</h2>
+    <p class="sub">Broches só contam visitas com check-in no local.</p>
+    <div class="faixa">${pins}</div>
+    <p class="aviso">A Cachoeira São Francisco foi registrada de memória, por isso ainda faltam ${5-4} para o broche de 5 cachoeiras.</p>`);
+}
+
+/* busca */
+let filtro = 'perto';
+const FILTROS = [['perto','Mais perto'],['seguras','Mais seguras'],['avaliadas','Mais bem avaliadas'],['calmas','Menos movimento'],['nadar','Dá para nadar'],['gratis','Gratuita']];
+function painelBusca(){
+  painel(`<h2 id="folha-titulo">Cachoeiras perto de você</h2>
+    <p class="sub">Perto de Belo Horizonte, MG</p>
+    <span class="exemplo">dados de exemplo</span>
+    <div class="chips" role="group" aria-label="Ordenar e filtrar">${FILTROS.map(([k,t])=>`<button class="chip" data-filtro="${k}" aria-pressed="${k===filtro}">${t}</button>`).join('')}</div>
+    <ul class="lista" id="lista-perto"></ul>
+    <p class="aviso">O mapa com a névoa chega na fase 2. Aqui é só a lista.</p>`);
+  listaPerto();
+}
+function listaPerto(){
+  let l = PERTO.slice();
+  const movN = {pouco:1,'médio':2,muito:3};
+  if(filtro==='seguras') l.sort((a,b)=>(b.seg??-1)-(a.seg??-1));
+  if(filtro==='avaliadas') l.sort((a,b)=>(b.nota??-1)-(a.nota??-1));
+  if(filtro==='calmas') l.sort((a,b)=>(movN[a.mov]??9)-(movN[b.mov]??9));
+  if(filtro==='nadar') l = l.filter(x=>x.nadar);
+  if(filtro==='gratis') l = l.filter(x=>x.gratis);
+  $('#lista-perto').innerHTML = l.map(x=>{
+    const ja = queroIr.some(q=>q.nome===x.nome);
+    const notas = x.n>=3 ? `<span>★ ${x.nota.toFixed(1)}</span><span>segurança ${x.seg.toFixed(1)}</span><span>movimento ${x.mov}</span>` : `<span>poucas avaliações</span>`;
+    return `<li><span class="n">${esc(x.nome)}</span><span class="d">${x.km} km</span><span class="l">${esc(x.lugar)}</span><span class="m">${notas}</span>
+      <span class="acao"><button data-acao="quero" data-nome="${esc(x.nome)}" data-lugar="${esc(x.lugar)}" ${ja?'disabled':''}>${ja?'na lista':'quero ir'}</button></span></li>`;
+  }).join('') || '<li>Nenhuma cachoeira com esse filtro por perto.</li>';
+}
+
+/* configurações */
+function painelConfig(){
+  const chave = (id, on, txt) => `<div class="opcao"><span id="l-${id}">${txt}</span><button class="chave" role="switch" aria-labelledby="l-${id}" aria-checked="${on}" data-chave="${id}"></button></div>`;
+  const cred = Object.entries(CREDITOS).map(([k,c])=>`${esc(c.titulo)}: ${esc(c.autor||'autor desconhecido')}, ${esc(c.licenca)}, <a href="${esc(c.pagina)}" target="_blank" rel="noopener">Wikimedia Commons</a>`).join('<br>');
+  painel(`<h2 id="folha-titulo">Ajustes</h2>
+    ${chave('sons', sons, 'Sons (papel, câmera, broche)')}
+    ${chave('chuva', true, 'Alerta de chuva')}
+    ${chave('broche', true, 'Aviso de broche novo')}
+    <div class="acoes">
+      <button class="btn claro" data-acao="fechar-livro">Fechar o diário</button>
+      <button class="btn claro" data-acao="primeira-vez">Ver como é a primeira vez</button>
+    </div>
+    <h3>Sobre este protótipo</h3>
+    <p>Protótipo visual: os dados são de exemplo e nada é salvo. As texturas da versão final serão fotos reais de madeira, couro e papel.</p>
+    <h3>Créditos das fotos</h3><p class="creditos">${cred}</p>`);
+}
+
+/* ---------------- eventos ---------------- */
+$('#capa').addEventListener('click', abrir);
+$('#capa').addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' '){ e.preventDefault(); abrir(); } });
+$('#fechar').addEventListener('click', fecharPainel);
+$('#veu').addEventListener('click', e => { if(e.target.id==='veu') fecharPainel(); });
+document.addEventListener('keydown', e => {
+  if(e.key==='Escape' && !$('#veu').hidden) fecharPainel();
+  if($('#veu').hidden && $('#palco').dataset.estado==='aberto'){ if(e.key==='ArrowRight') virar(1); if(e.key==='ArrowLeft') virar(-1); }
+});
+document.querySelectorAll('[data-abrir]').forEach(b => b.addEventListener('click', () => {
+  ({busca:painelBusca, broches:painelBroches, config:painelConfig})[b.dataset.abrir]();
+}));
+
+document.addEventListener('click', ev => {
+  const t = ev.target.closest('button'); if(!t) return;
+  if(t.dataset.virar){ virar(+t.dataset.virar); return; }
+  if(t.dataset.estrela){
+    const n = +t.dataset.estrela, id = t.dataset.id, campo = t.dataset.campo;
+    if(id==='novo'){ novo.nota = n; $('#nota-nova').innerHTML = estrelasHTML(n,'novo'); return; }
+    const e = achar(id);
+    if(campo==='nota') e.nota = (e.nota===n ? n-1 : n); else e.sub[campo.slice(4)] = n;
+    render();
+    if(!$('#veu').hidden && $('#folha-titulo')?.textContent===e.nome) painelDetalhes(e);
+    return;
+  }
+  if(t.dataset.filtro){ filtro = t.dataset.filtro; document.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed', c===t)); listaPerto(); return; }
+  if(t.dataset.chave){ const on = t.getAttribute('aria-checked')!=='true'; t.setAttribute('aria-checked', on); if(t.dataset.chave==='sons') sons = on; return; }
+  const a = t.dataset.acao, e = t.dataset.id ? achar(t.dataset.id) : null;
+  if(a==='rota') painelRota(e);
+  else if(a==='galeria') painelGaleria(e);
+  else if(a==='detalhes') painelDetalhes(e);
+  else if(a==='adicionar') painelAdicionar();
+  else if(a==='escolher'){
+    novo.nome = t.dataset.nome; novo.lugar = t.dataset.lugar; novo.novaCadastrada = !!t.dataset.nova;
+    $('#sugestoes').innerHTML=''; $('#busca-nome').value = novo.nome;
+    $('#escolhida').innerHTML = `<div class="escolhida"><span>${esc(novo.nome)}${novo.lugar?` <small>· ${esc(novo.lugar)}</small>`:' <small>· nova, sem rota</small>'}</span></div>`;
+    $('#erro-novo').hidden = true;
+  }
+  else if(a==='guardar') guardar();
+  else if(a==='fav'){ e.fav = !e.fav; render(); painelDetalhes(e); }
+  else if(a==='apagar'){
+    $('#confirmar').innerHTML = `<div class="confirmar">Apagar <b>${esc(e.nome)}</b> do diário? As cachoeiras seguintes sobem uma vaga.<div class="acoes"><button class="btn perigo" data-acao="apagar-sim" data-id="${e.id}">Apagar</button><button class="btn claro" data-acao="apagar-nao">Manter</button></div></div>`;
+  }
+  else if(a==='apagar-nao') $('#confirmar').innerHTML='';
+  else if(a==='apagar-sim'){
+    entradas = entradas.filter(x=>x!==e);
+    fecharPainel(); const tot = totalPaginasDiario(); if(idx>tot) idx = largo.matches ? (tot%2?tot-1:tot) : tot; render(); aviso('Apagada. As seguintes subiram uma vaga.');
+  }
+  else if(a==='quero'){ queroIr.push({nome:t.dataset.nome,lugar:t.dataset.lugar}); listaPerto(); render(); aviso('Colada no mural "Quero ir", dentro da capa.'); }
+  else if(a==='fechar-livro'){ fecharPainel(); fecharLivro(); }
+  else if(a==='primeira-vez'){ entradas = []; queroIr = []; fecharPainel(); fecharLivro(); aviso('Diário zerado. Toque na capa para abrir.'); }
+});
+document.addEventListener('input', ev => {
+  if(ev.target.id==='busca-nome'){ novo.nome=''; $('#escolhida').innerHTML=''; atualizarSugestoes(ev.target.value); }
+});
+document.addEventListener('change', ev => {
+  if(ev.target.id==='fotos-visita'){
+    const arqs = [...ev.target.files].slice(0,10);
+    novo.fotos = arqs.map(f=>URL.createObjectURL(f));
+    $('#fotos-prev').innerHTML = novo.fotos.map(u=>`<img src="${u}" alt="">`).join('') + (ev.target.files.length>10?'<p class="aviso">Ficaram só as 10 primeiras.</p>':'');
+  }
+});
+
+/* deslizar para virar no celular */
+let x0=null, y0=null;
+$('#folhas').addEventListener('pointerdown', e => { x0=e.clientX; y0=e.clientY; });
+$('#folhas').addEventListener('pointerup', e => {
+  if(x0===null) return; const dx=e.clientX-x0, dy=e.clientY-y0; x0=null;
+  if(Math.abs(dx)>60 && Math.abs(dx)>Math.abs(dy)*1.5) virar(dx<0?1:-1);
+});
+largo.addEventListener('change', () => { if($('#palco').dataset.estado==='aberto') render(); });
+
+render();
+</script>
