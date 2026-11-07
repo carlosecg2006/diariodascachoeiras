@@ -34,6 +34,14 @@ Um diário de cachoeiras que mistura diário de papel com álbum de fotos. Você
 ### Capa
 - Ao entrar, aparece um livro fechado com capa de couro escrito "Diário das Cachoeiras".
 - Ao tocar, o livro abre com animação.
+- **Estante:** quando existir mais de um volume, você desliza para o lado na tela da capa e vê os outros livros. O volume atual fica sempre na frente.
+- **Contracapa (parte de dentro da capa):** mural com os post-its da lista "quero ir". É a primeira coisa que você vê ao abrir o livro.
+
+### Primeira vez no app
+- Se o app estiver aberto no navegador, e não na tela de início, aparece antes o passo a passo para instalar.
+- Depois aparece só a capa, com "toque para abrir".
+- Ao abrir, um bilhetinho escrito à mão na primeira página explica em 3 linhas o que fazer, ao lado do "+". Sem tutorial longo: o próprio diário ensina.
+- O app só pede permissão de localização na primeira vez que você usa o mapa ou faz check-in, explicando o porquê.
 - **Livro que envelhece:** a capa muda em 4 estágios, conforme as cachoeiras do volume: **nova** (0), **usada** (15), **gasta** (30) e **surrada** (45 ou mais). Cada volume novo começa com capa nova.
 
 ### Páginas
@@ -42,9 +50,9 @@ Um diário de cachoeiras que mistura diário de papel com álbum de fotos. Você
   - Na primeira vez que a pessoa entra, a primeira página tem só o "+".
   - Exemplo: com 5 cachoeiras na página, a 6ª vaga é o "+". Com a página cheia, o "+" passa para a página seguinte.
 - **Virar páginas com o dedo**, com animação de papel.
-- **Sumário** nas primeiras páginas.
-- **Mapa desenhado à mão** na última página, com todas as cachoeiras visitadas.
-- **Fitinha marcadora** para pular direto para as favoritas.
+- **Sumário** na primeira página de cada volume, montado sozinho pelo app.
+- **Mapa desenhado à mão** na última página de cada volume, montado sozinho: os estados com as cachoeiras daquele volume marcadas, ligadas por um tracejado na ordem das visitas.
+- **Fitinhas das favoritas:** você marca uma cachoeira como favorita pelo ícone da fitinha nos detalhes. Cada favorita ganha uma fitinha saindo do livro, para pular direto até ela. **Máximo de 5 fitinhas por volume**; a lista completa fica no filtro "favoritas".
 - **Cada volume tem 10 páginas (60 cachoeiras).** Diário cheio vira "Volume II", e os volumes antigos ficam numa estante.
 - **Apagar uma cachoeira:** as que vêm depois sobem uma vaga para preencher o buraco. O diário nunca fica com vagas vazias no meio, e o "+" fica sempre logo depois da última cachoeira.
 - **Voltar à mesma cachoeira:** cada visita é um registro novo, com fotos, data e avaliação próprias. Nos detalhes aparece "Você já esteve aqui N vezes", com links para as outras visitas.
@@ -90,7 +98,7 @@ Cada cachoeira ocupa uma vaga da página e tem 4 partes, cada uma com sua ação
 ### Fotos
 - **Até 10 fotos por visita**, pensadas como "as 10 melhores". Só fotos, sem vídeos.
 - **Capa:** você escolhe qual foto fica no topo da pilha de polaroids. A padrão é a primeira.
-- As fotos são comprimidas ao enviar. O plano gratuito do Supabase (1 GB) comporta cerca de 2 a 3 mil fotos.
+- As fotos são guardadas com até **2000 px** no lado maior (cerca de 400 KB cada), sem guardar o original (que continua no celular). Ficam nítidas na tela e no PDF A5. O plano gratuito do Supabase (1 GB) comporta cerca de 2.500 fotos.
 
 ---
 
@@ -136,6 +144,13 @@ Abre pelo botão "Detalhes".
   - Trilha difícil
   - Cachoeiras em 3 estados diferentes
   - "Desbravador": registrou uma cachoeira que não estava no mapa
+  - Volume completo: encheu um diário
+  - Quatro estações: cachoeiras no verão, outono, inverno e primavera
+  - Mergulho no inverno: banho em cachoeira em junho, julho ou agosto
+  - Madrugador: check-in antes das 7h
+  - Fiel: voltou 3 vezes à mesma cachoeira
+  - Colecionador de fotos: 100 fotos no diário
+- Novos broches podem ser criados depois sem mudar o resto do app.
 
 ---
 
@@ -201,7 +216,7 @@ Só duas, e as duas desligáveis nas configurações:
 ## 10. Extras
 
 - **Exportar o diário em PDF**, para imprimir como um livro de verdade: um volume inteiro, igual ao livro (capa, páginas com as cachoeiras, foto de capa de cada uma, estrelas e "como foi"), no tamanho **A5**, pronto para gráfica.
-- **Retrospectiva do ano:** cachoeiras visitadas, quilômetros de trilha, favorita do ano.
+- **Retrospectiva do ano:** cachoeiras visitadas, quilômetros de trilha, favorita do ano. Aparece a partir de **15 de dezembro** como um **envelope em cima da mesa** e fica guardada para rever depois.
 
 ---
 
@@ -235,4 +250,4 @@ Só duas, e as duas desligáveis nas configurações:
 
 ## Perguntas em aberto
 
-(Em andamento: rodadas de perguntas para fechar o plano.)
+Nenhuma decisão de produto em aberto. Detalhes visuais (fontes, cores, disposição das 6 vagas no celular) serão decididos com um protótipo visual.
