@@ -34,7 +34,7 @@ Um diário de cachoeiras que mistura diário de papel com álbum de fotos. Você
 ### Capa
 - Ao entrar, aparece um livro fechado com capa de couro escrito "Diário das Cachoeiras".
 - Ao tocar, o livro abre com animação.
-- **Livro que envelhece:** quanto mais você usa, mais gasta fica a capa de couro.
+- **Livro que envelhece:** a capa muda em 4 estágios, conforme as cachoeiras do volume: **nova** (0), **usada** (15), **gasta** (30) e **surrada** (45 ou mais). Cada volume novo começa com capa nova.
 
 ### Páginas
 - Cada página comporta **6 cachoeiras**.
@@ -56,7 +56,10 @@ Um diário de cachoeiras que mistura diário de papel com álbum de fotos. Você
   - Data da visita
   - Data do registro
   - Estado
-  - (outros a definir)
+  - Só verificadas (com check-in)
+  - Favoritas (as da fitinha)
+  - Por nota separada (segurança, banho, trilha, beleza, movimento)
+- **Com filtro ligado:** o diário mostra a nova ordem com uma etiqueta "Filtro: …", o "+" some, e um toque volta à ordem normal. Filtrar não muda a ordem real do diário.
 
 ### Cada cachoeira na página
 Cada cachoeira ocupa uma vaga da página e tem 4 partes, cada uma com sua ação:
@@ -68,7 +71,9 @@ Cada cachoeira ocupa uma vaga da página e tem 4 partes, cada uma com sua ação
 | **Estrelas** | Avaliação de 5 estrelas | Muda a avaliação na hora, quantas vezes quiser |
 | **Botão "Detalhes"** | Botão embaixo | Abre os detalhes daquela cachoeira |
 
-- **Carimbo de visitado**, como o de passaporte, com a data. Com check-in por GPS na cachoeira, vira "verificado".
+- **Carimbo de visitado**, como o de passaporte, com a data:
+  - **"Verificado"**: teve check-in por GPS na cachoeira.
+  - **"Registrada de memória"**: visita registrada sem check-in (por exemplo, uma que você foi antes de ter o app).
 
 ---
 
@@ -77,6 +82,9 @@ Cada cachoeira ocupa uma vaga da página e tem 4 partes, cada uma com sua ação
 - Tocar no "+" abre o formulário da visita.
 - No campo do título, ao digitar, aparecem sugestões de cachoeiras para você tocar e escolher.
 - **Cachoeira que não está no mapa:** dá para cadastrar uma nova normalmente. Ela entra no diário, mas **não tem rota**.
+- **Só nome e data são obrigatórios** (a data já vem preenchida com hoje). Todo o resto é opcional e dá para completar depois.
+- **Visitas antigas:** dá para registrar cachoeiras visitadas antes de ter o app, escolhendo a data no passado. Elas entram com o carimbo "registrada de memória" e não contam para os broches.
+- **Cachoeiras cadastradas por você ficam só no seu diário.** Não aparecem no mapa de mais ninguém, para manter as cachoeiras "secretas" em segredo.
 - Você adiciona as fotos e os detalhes (veja abaixo).
 
 ### Fotos
@@ -118,6 +126,7 @@ Abre pelo botão "Detalhes".
   - O GPS funciona sem internet: o check-in fica salvo e é enviado depois.
   - Em cachoeiras cadastradas por você (fora do mapa), o check-in define a localização dela.
 - Nos broches de contagem (5, 10, 25), a mesma cachoeira conta uma vez só, mesmo com várias visitas.
+- **Broches são permanentes:** depois de ganho, o broche não se perde, mesmo que você apague a cachoeira que o deu.
 - Exemplos de broches:
   - Primeira cachoeira
   - 5, 10 e 25 cachoeiras visitadas
@@ -144,11 +153,12 @@ Um mapa próprio para cachoeiras, meio Pokémon GO, mas focado em buscar.
   - Se dá para nadar
   - Gratuita
   - Se dá para chegar de carro
-- **Névoa no mapa:** as regiões vão se revelando conforme você visita cachoeiras.
-- **Lista "quero ir":** a cachoeira aparece no diário como um post-it colado, esperando a visita.
+- **Névoa no mapa:** cada check-in revela um círculo de **10 km** em volta da cachoeira. O resto do mapa fica coberto por uma névoa leve, só visual: dá para ver e buscar todas as cachoeiras, inclusive as que estão debaixo dela.
+- **Lista "quero ir":** a cachoeira aparece no diário como um post-it colado, esperando a visita. Cada item pode ter uma data **"pretendo ir em"**.
 - Tocar numa cachoeira abre a rota no Google Maps ou no Waze.
 
 - **De onde vêm as notas do mapa:** de **médias anônimas** das avaliações de todos os usuários. O mapa mostra só a média, nunca quem avaliou. Fotos, textos e o diário de cada um continuam totalmente privados.
+- A média só aparece com **pelo menos 3 avaliações** de pessoas diferentes. Com menos, aparece "poucas avaliações".
 
 ---
 
@@ -162,7 +172,24 @@ Um mapa próprio para cachoeiras, meio Pokémon GO, mas focado em buscar.
 
 ---
 
-## 7. Sem sinal (offline)
+## 7. Notificações
+
+Só duas, e as duas desligáveis nas configurações:
+1. **Alerta de chuva:** no dia anterior, se há chuva prevista para uma cachoeira da lista "quero ir" com data marcada.
+2. **Broche novo.**
+
+---
+
+## 8. Configurações e conta
+
+- **Sons:** vêm ligados, com botão para desligar.
+- Ligar e desligar cada notificação.
+- **Baixar todos os meus dados** e **apagar minha conta.**
+- **Administrador (dono do app):** convida e remove pessoas. Quem é removido perde o acesso na hora. O diário e as fotos dessa pessoa são apagados depois de 30 dias, com a opção de baixar tudo antes.
+
+---
+
+## 9. Sem sinal (offline)
 
 - O app guarda as fotos e o registro da visita no celular e envia quando a internet voltar.
 - No iPhone, o envio acontece quando a pessoa abre o app de novo, não em segundo plano.
@@ -171,9 +198,9 @@ Um mapa próprio para cachoeiras, meio Pokémon GO, mas focado em buscar.
 
 ---
 
-## 8. Extras
+## 10. Extras
 
-- **Exportar o diário em PDF**, para imprimir como um livro de verdade.
+- **Exportar o diário em PDF**, para imprimir como um livro de verdade: um volume inteiro, igual ao livro (capa, páginas com as cachoeiras, foto de capa de cada uma, estrelas e "como foi"), no tamanho **A5**, pronto para gráfica.
 - **Retrospectiva do ano:** cachoeiras visitadas, quilômetros de trilha, favorita do ano.
 
 ---
