@@ -49,7 +49,9 @@ Um diário de cachoeiras que mistura diário de papel com álbum de fotos. Você
 - Enquanto houver espaço, a próxima vaga aparece como um **quadrado pontilhado com um "+"**, tudo desenhado a lápis.
   - Na primeira vez que a pessoa entra, a primeira página tem só o "+".
   - Exemplo: com 5 cachoeiras na página, a 6ª vaga é o "+". Com a página cheia, o "+" passa para a página seguinte.
-- **Virar páginas com o dedo**, com animação de papel.
+- **Virar páginas com o dedo**, com animação de papel, ou pelas **setas grandes e bem visíveis**:
+  - No celular, as setas ficam na barra de baixo, ao lado de Buscar, Broches e Ajustes, ao alcance do polegar.
+  - Em tela grande, ficam nos cantos de baixo das páginas.
 - **Sumário** na primeira página de cada volume, montado sozinho pelo app.
 - **Mapa desenhado à mão** na última página de cada volume, montado sozinho: os estados com as cachoeiras daquele volume marcadas, ligadas por um tracejado na ordem das visitas.
 - **Fitinhas das favoritas:** você marca uma cachoeira como favorita pelo ícone da fitinha nos detalhes. Cada favorita ganha uma fitinha saindo do livro, para pular direto até ela. **Máximo de 5 fitinhas por volume**; a lista completa fica no filtro "favoritas".
@@ -106,6 +108,9 @@ Cada cachoeira ocupa uma vaga da página e tem 4 partes, cada uma com sua ação
 
 Abre pelo botão "Detalhes".
 
+- **A primeira coisa que aparece são as fotos**, grandes e **sem moldura de polaroid** (a polaroid fica só na página do diário). Passam para o lado com o dedo ou pelas setas, com contador "1 de 3". **Sem legenda.**
+- Depois vêm o nome, o lugar, a data e as notas.
+
 - **Avaliações separadas**, opcionais, de 1 a 5, além das 5 estrelas gerais:
   - Segurança
   - Movimento (vazia ou cheia)
@@ -122,7 +127,7 @@ Abre pelo botão "Detalhes".
   - Se é paga
   - Onde estacionar
   - Se estava cheia
-- **Galeria** com as fotos em polaroid, legenda em letra de mão embaixo de cada uma.
+- Tocar na pilha de polaroids da página abre só as fotos, do mesmo jeito: grandes, sem moldura e sem legenda.
 
 ---
 
@@ -217,6 +222,17 @@ Só duas, e as duas desligáveis nas configurações:
 
 - **Exportar o diário em PDF**, para imprimir como um livro de verdade: um volume inteiro, igual ao livro (capa, páginas com as cachoeiras, foto de capa de cada uma, estrelas e "como foi"), no tamanho **A5**, pronto para gráfica.
 - **Retrospectiva do ano:** cachoeiras visitadas, quilômetros de trilha, favorita do ano. Aparece a partir de **15 de dezembro** como um **envelope em cima da mesa** e fica guardada para rever depois.
+
+---
+
+## Acessibilidade e facilidade de uso
+
+O objetivo é um app bonito, fácil e acessível, sem excessos:
+- Botões com área de toque confortável (cerca de 44 px nos principais).
+- Texto com bom contraste sobre o papel e tamanho mínimo de 14 px.
+- Tudo funciona pelo teclado e por leitor de tela: cada botão diz o que faz (por exemplo, "Dar 4 estrelas", "Detalhes de Cachoeira do Tomé").
+- Painéis prendem o foco enquanto estão abertos e fecham com Esc.
+- Quem pede menos movimento no celular não vê as animações de virar página e abrir o livro.
 
 ---
 

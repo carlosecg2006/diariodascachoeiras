@@ -8,7 +8,7 @@
 :root{
   --mesa:#1c110a;
   --tinta:#24304a;          /* tinta de caneta-tinteiro */
-  --lapis:#6d675e;          /* grafite */
+  --lapis:#59534b;          /* grafite (contraste 5:1 no papel) */
   --papel:#ece2cb;
   --papel-sombra:#cdbf9f;
   --ouro:#cfae63;           /* letras douradas da capa */
@@ -35,7 +35,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
   padding-left:max(16px, env(safe-area-inset-left, 0px));
   padding-right:max(16px, env(safe-area-inset-right, 0px));
-  padding-block:12px;box-sizing:border-box;row-gap:34px;
+  padding-block:12px;box-sizing:border-box;
   background:
     radial-gradient(ellipse 70% 60% at 50% 38%, rgba(255,214,150,.16), transparent 70%),
     radial-gradient(ellipse 120% 90% at 50% 50%, transparent 55%, rgba(0,0,0,.55)),
@@ -44,7 +44,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 
 /* ---------- tamanhos do livro ---------- */
 .palco{
-  --pw:min(calc(100vw - 32px), 460px, calc((100dvh - 152px) / 1.58));
+  --pw:min(calc(100vw - 32px), 460px, calc((100dvh - 118px) / 1.58));
   --ph:calc(var(--pw) * 1.58);
   position:relative;width:var(--pw);height:var(--ph);flex:none;
   perspective:2200px;
@@ -69,7 +69,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   color:var(--tinta);
   box-shadow:0 18px 40px rgba(0,0,0,.55), 0 2px 0 rgba(0,0,0,.2);
   border-radius:2px 6px 6px 2px;
-  padding:clamp(14px,4%,26px) clamp(12px,4.5%,28px) 34px;
+  padding:clamp(12px,3.4%,26px) clamp(12px,4.5%,28px) 30px;
   display:flex;flex-direction:column;
   transform-origin:left center;backface-visibility:hidden;
 }
@@ -80,10 +80,30 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .pagina.esq::after{right:auto;left:-5px;border-radius:3px 0 0 3px}
 .pagina.vazia{background:linear-gradient(270deg, rgba(90,60,20,.22), transparent 8%),url("{{IMG:paper}}") center/cover}
 
-.num-pag{position:absolute;bottom:8px;left:0;right:0;text-align:center;font-family:var(--f-lapis);font-size:20px;color:var(--lapis)}
-.virar{position:absolute;bottom:2px;width:44px;height:36px;font-family:var(--f-lapis);font-size:30px;color:var(--lapis);line-height:1}
-.virar.prox{right:6px}.virar.ant{left:6px}
-.virar[disabled]{opacity:.18;cursor:default}
+.num-pag{position:absolute;bottom:6px;left:0;right:0;text-align:center;font-family:var(--f-lapis);font-size:22px;color:var(--lapis);pointer-events:none}
+.virar{position:absolute;bottom:10px;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;
+  background:var(--tinta);color:#f3ead6;box-shadow:0 3px 8px rgba(0,0,0,.3);z-index:3;transition:transform .15s}
+.virar svg{width:24px;height:24px}
+.virar:hover{transform:scale(1.06)}
+.virar:active{transform:scale(.94)}
+.virar.prox{right:12px}.virar.ant{left:12px}
+.virar-cel{position:static;flex:none;align-self:center}
+@media not ((min-width:900px) and (min-height:560px)){
+  .pagina .virar{display:none}
+  .pagina{padding-bottom:30px}
+  .pagina .cab-pag{display:none}
+  .pagina .fitinhas{bottom:auto;top:-14px;right:10%}
+  .pagina .fitinha{height:34px}
+  .mesa{row-gap:12px}
+  .atalho{padding:4px 2px;font-size:13px}
+  .atalho svg{width:30px;height:30px}
+}
+@media (min-width:900px) and (min-height:560px){
+  .virar-cel{display:none}
+  .pagina{padding-bottom:64px}
+  .num-pag{bottom:22px}
+}
+.palco:not([data-estado="aberto"]) ~ .borda .virar-cel{visibility:hidden}
 
 /* contracapa: mural do "quero ir" */
 .pagina.contracapa{background:url("{{IMG:endpaper}}") center/cover;color:var(--tinta);padding:22px 18px 34px;border-radius:6px 2px 2px 6px}
@@ -116,7 +136,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .pilha{position:relative;flex:1;width:100%;min-height:0;margin:4px 0 2px}
 .pola{
   position:absolute;left:50%;top:50%;
-  height:min(92%, 118px);aspect-ratio:.86;box-sizing:border-box;
+  height:min(100%, 124px);aspect-ratio:.86;box-sizing:border-box;
   background:#f7f4ec;padding:5% 5% 18%;
   box-shadow:0 3px 7px rgba(0,0,0,.35);
   transform:translate(-50%,-50%) translate(calc(var(--dx,0%) * var(--k,1)), calc(var(--dy,0%) * var(--k,1))) rotate(calc(var(--r,0deg) * var(--k,1)));
@@ -125,7 +145,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .pola:last-child::before{content:"";position:absolute;top:-7px;left:50%;width:40%;height:13px;transform:translateX(-50%) rotate(-5deg);background:rgba(240,232,200,.62);box-shadow:0 1px 2px rgba(0,0,0,.15)}
 .pola img{display:block;width:100%;aspect-ratio:1;object-fit:cover;filter:saturate(.92) contrast(1.02)}
 .pilha:hover .pola{--k:1.6}
-.qtd-fotos{position:absolute;right:2px;bottom:0;font-size:12px;color:var(--lapis);z-index:6}
+.qtd-fotos{position:absolute;left:2px;bottom:0;font-size:12px;color:var(--lapis);z-index:6}
 
 .carimbo{position:absolute;z-index:6;pointer-events:none;right:-2px;top:26%;
   width:clamp(40px,30%,54px);aspect-ratio:1;border-radius:50%;
@@ -137,11 +157,13 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .carimbo.memoria{border-style:dashed;color:var(--lapis);border-color:var(--lapis);transform:rotate(9deg)}
 
 .estrelas{display:flex;gap:1px}
-.estrelas button{width:clamp(18px,5vw,22px);height:clamp(18px,5vw,22px);display:grid;place-items:center}
-.estrelas svg{width:100%;height:100%}
+.estrelas button{width:clamp(26px,7.4vw,32px);height:24px;display:grid;place-items:center}
+.estrelas button svg{width:clamp(18px,5vw,22px);height:clamp(18px,5vw,22px)}
+
 .estrelas .on path{fill:var(--estrela);stroke:#8a6414}
 .estrelas .off path{fill:none;stroke:var(--lapis);stroke-dasharray:2 1.5}
-.detalhes-btn{font-size:clamp(12px,3.3vw,14px);color:var(--tinta);border-bottom:1.5px solid rgba(36,48,74,.45);line-height:1.1;margin-top:1px}
+.detalhes-btn{font-size:14px;color:var(--tinta);min-height:26px;padding:2px 12px;border-radius:999px;box-shadow:inset 0 0 0 1.5px rgba(36,48,74,.5);line-height:1}
+.detalhes-btn:hover{background:rgba(36,48,74,.08)}
 
 /* vaga "+" a lápis */
 .vaga-mais{width:100%;height:100%;position:relative;display:grid;place-items:center;color:var(--lapis)}
@@ -194,9 +216,9 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 }
 
 /* ---------- atalhos na borda ---------- */
-.borda{display:flex;gap:10px;flex:none}
+.borda{display:flex;gap:8px;flex:none;align-items:flex-start}
 @media (min-width:900px) and (min-height:560px){.borda{flex-direction:column;gap:18px}}
-.atalho{display:flex;flex-direction:column;align-items:center;gap:2px;width:86px;padding:8px 4px 6px;border-radius:12px;color:var(--creme);font-size:14px;line-height:1.1}
+.atalho{display:flex;flex-direction:column;align-items:center;gap:2px;width:clamp(64px,19vw,86px);padding:8px 4px 6px;border-radius:12px;color:var(--creme);font-size:14px;line-height:1.1}
 .atalho svg{width:38px;height:38px;filter:drop-shadow(0 2px 2px rgba(0,0,0,.5))}
 .atalho:hover{background:rgba(255,230,180,.07)}
 .atalho .contagem{font-size:12px;opacity:.7}
@@ -213,8 +235,9 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 }
 @media (min-width:700px){.veu{align-items:center}.folha{border-radius:6px;max-height:86dvh;padding:26px 30px}}
 @keyframes sobe{from{transform:translateY(40px);opacity:0}}
-.fechar{position:absolute;top:8px;right:10px;width:40px;height:40px;font-family:var(--f-lapis);font-size:34px;line-height:1;color:var(--lapis)}
-.folha h2{margin:0 40px 2px 0;font-family:var(--f-capa);font-weight:400;font-size:28px;line-height:1.05;text-wrap:balance}
+.fechar{position:sticky;top:0;float:right;margin:-6px -6px 0 8px;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--tinta);color:#f3ead6;z-index:4;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.fechar svg{width:20px;height:20px}
+.folha h2{margin:0 0 2px;font-family:var(--f-capa);font-weight:400;font-size:28px;line-height:1.05;text-wrap:balance}
 .folha .sub{margin:0 0 14px;color:var(--lapis);font-size:16px}
 .folha p{font-size:17px;line-height:1.45;max-width:60ch}
 .folha h3{font-family:var(--f-capa);font-style:italic;font-weight:400;font-size:20px;margin:18px 0 6px}
@@ -225,16 +248,22 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .aviso{font-family:var(--f-lapis);font-size:21px;color:var(--lapis);line-height:1.1}
 .exemplo{display:inline-block;font-size:13px;color:var(--carimbo);border:1px dashed var(--carimbo);padding:1px 8px;border-radius:10px;margin-bottom:8px}
 
-/* galeria */
-.galeria{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding:10px 4px 18px;margin:0 -4px}
-.galeria figure{flex:0 0 min(78%, 340px);scroll-snap-align:center;margin:0;background:#f8f5ee;padding:10px 10px 0;box-shadow:0 6px 16px rgba(0,0,0,.3)}
-.galeria figure:nth-child(odd){transform:rotate(-1.2deg)}.galeria figure:nth-child(even){transform:rotate(1deg)}
-.galeria img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
-.galeria figcaption{font-size:17px;padding:10px 4px 14px;min-height:2.4em;line-height:1.2}
+/* fotos: carrossel simples, sem moldura */
+.carrossel{position:relative;margin:0 0 14px;clear:both}
+.trilho{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:10px;scrollbar-width:none;background:rgba(36,48,74,.1)}
+.trilho::-webkit-scrollbar{display:none}
+.trilho img{flex:0 0 100%;width:100%;aspect-ratio:4/3;object-fit:cover;scroll-snap-align:center;display:block}
+.car-btn{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:rgba(243,234,214,.92);color:var(--tinta);box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.car-btn svg{width:22px;height:22px}
+.car-btn.ant{left:8px}.car-btn.prox{right:8px}
+.car-btn[hidden]{display:none!important}
+.car-cont{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(20,14,8,.65);color:#f3ead6;font-size:14px;padding:3px 10px;border-radius:999px;font-variant-numeric:tabular-nums}
+.sem-fotos{padding:28px 12px;text-align:center;border:1.5px dashed var(--lapis);border-radius:10px;color:var(--lapis);font-size:16px;margin-bottom:14px;clear:both}
 
 /* detalhes */
 .notas{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:center;font-size:16px}
-.notas .estrelas button{width:20px;height:20px}
+.notas .estrelas button{width:34px;height:34px}
+.notas .estrelas button svg{width:22px;height:22px}
 .ficha{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);gap:4px 14px;font-size:16px;margin:0}
 .ficha dt{color:var(--lapis)}.ficha dd{margin:0}
 .como-foi{font-size:18px;line-height:1.4;background:repeating-linear-gradient(180deg,transparent 0 24px,rgba(36,48,74,.13) 24px 25px);padding-top:1px}
@@ -324,6 +353,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   </div>
 
   <nav class="borda" aria-label="Atalhos">
+    <button class="virar virar-cel" id="cel-ant" data-virar="-1" aria-label="Página anterior"></button>
     <button class="atalho" data-abrir="busca">
       <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="17" cy="17" r="10" fill="rgba(210,230,240,.18)" stroke="#d8c08a" stroke-width="3"/><path d="M24.5 24.5l9 9" stroke="#6b4a2a" stroke-width="5" stroke-linecap="round"/><path d="M12 14c2-3 5-4 8-3" stroke="#fff" stroke-opacity=".5" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
       Buscar
@@ -337,11 +367,12 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
       <svg viewBox="0 0 40 40" aria-hidden="true"><g fill="#bfa77a" stroke="#6b5532" stroke-width="1.2"><path d="M18 4h4l1 5 4 2 4-3 3 3-3 4 2 4 5 1v4l-5 1-2 4 3 4-3 3-4-3-4 2-1 5h-4l-1-5-4-2-4 3-3-3 3-4-2-4-5-1v-4l5-1 2-4-3-4 3-3 4 3 4-2z"/></g><circle cx="20" cy="20" r="5" fill="#2a1a10"/></svg>
       Ajustes
     </button>
+    <button class="virar virar-cel" id="cel-prox" data-virar="1" aria-label="Próxima página"></button>
   </nav>
 
   <div class="veu" id="veu" hidden>
     <section class="folha" id="folha" role="dialog" aria-modal="true" aria-labelledby="folha-titulo">
-      <button class="fechar" id="fechar" aria-label="Fechar">×</button>
+      <button class="fechar" id="fechar" aria-label="Fechar"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 4l12 12M16 4L4 16" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
       <div id="folha-conteudo"></div>
     </section>
   </div>
@@ -355,27 +386,27 @@ const CREDITOS = {{CREDITOS_JSON}};
 /* ---------------- dados de exemplo ---------------- */
 let entradas = [
   {id:1,nome:'Cachoeira do Tomé',lugar:'Serra do Cipó, MG',data:'2025-01-12',nota:5,fotos:['tome','cipo'],
-   legendas:['O poço do Tomé. Água gelada!','Subindo o rio depois do almoço'],verificada:true,fav:true,
+  verificada:true,fav:true,
    sub:{Segurança:4,Movimento:3,Banho:5,Trilha:4,Beleza:5},
    comoFoi:'Saímos de BH ainda de madrugada e chegamos às 6h40, sem ninguém. A água estava gelada, mas o poço é perfeito para nadar. Voltaria amanhã.',
    ficha:{'Com quem':'Ana, Léo e Rafa','Trilha':'Fácil','Caminhada':'25 min','Dá para nadar':'Sim','Água':'Gelada','Paga':'Não','Estacionar':'Na estrada, perto da ponte','Movimento':'Vazia'},visitas:2},
   {id:2,nome:'Cachoeira dos Cristais',lugar:'Biribiri, Diamantina, MG',data:'2025-03-08',nota:4,fotos:['cristais','farofa','veadinhos'],
-   legendas:['A queda vista do poço','Outra queda no caminho','Fim de tarde no rio'],verificada:true,fav:false,
+  verificada:true,fav:false,
    sub:{Segurança:5,Movimento:4,Banho:4,Trilha:3,Beleza:5},
    comoFoi:'Estrada de terra até a vila de Biribiri. A trilha é curta e a água é cor de chá.',
    ficha:{'Com quem':'Ana','Trilha':'Fácil','Caminhada':'15 min','Dá para nadar':'Sim','Água':'Fria','Paga':'Não','Estacionar':'Na vila','Movimento':'Cheia no fim de semana'},visitas:1},
   {id:3,nome:'Cachoeira do Mosquito',lugar:'Chapada Diamantina, BA',data:'2025-04-19',nota:5,fotos:['mosquito','piabinha'],
-   legendas:['A parede de pedra listrada','A água descendo nas pedras'],verificada:true,fav:true,
+  verificada:true,fav:true,
    sub:{Segurança:4,Movimento:4,Banho:4,Trilha:4,Beleza:5},
    comoFoi:'Feriado de Páscoa. A queda é alta e a pedra parece pintada.',
    ficha:{'Com quem':'Léo e Rafa','Trilha':'Média','Caminhada':'40 min','Dá para nadar':'Sim','Água':'Fria','Paga':'Sim, R$ 20','Estacionar':'Na fazenda','Movimento':'Média'},visitas:1},
   {id:4,nome:'Cachoeira São Francisco',lugar:'Serra da Canastra, MG',data:'2025-06-14',nota:4,fotos:['saofrancisco','15quedas'],
-   legendas:['Os degraus de pedra','Mais abaixo no rio'],verificada:false,fav:false,
+  verificada:false,fav:false,
    sub:{Segurança:3,Movimento:5,Banho:2,Trilha:2,Beleza:4},
    comoFoi:'Fui em 2019, registrei de memória. Lembro do frio de junho e do pão de queijo na volta.',
    ficha:{'Com quem':'Família','Trilha':'Difícil','Caminhada':'1h20','Dá para nadar':'Não','Água':'Muito gelada','Paga':'Não','Estacionar':'Na estrada de terra','Movimento':'Vazia'},visitas:1},
   {id:5,nome:'Cachoeira de Ibitipoca',lugar:'Lima Duarte, MG',data:'2025-09-03',nota:3,fotos:['ibitipoca','itatiaia','barao'],
-   legendas:['A queda no meio da mata','O cânion da trilha','Uma prainha de pedra'],verificada:true,fav:false,
+  verificada:true,fav:false,
    sub:{Segurança:4,Movimento:2,Banho:3,Trilha:4,Beleza:4},
    comoFoi:'Bonita, mas estava lotada no feriado. Vale ir em dia de semana.',
    ficha:{'Com quem':'Rafa','Trilha':'Média','Caminhada':'1h','Dá para nadar':'Pouco','Água':'Fria','Paga':'Sim, entrada do parque','Estacionar':'No parque','Movimento':'Lotada'},visitas:1},
@@ -447,8 +478,8 @@ function somPapel(dur=.22){
 /* ---------------- desenho ---------------- */
 const estrelaPath = 'M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z';
 function estrelasHTML(nota, id, campo='nota', tamanho=''){
-  let h = `<div class="estrelas" role="group" aria-label="Avaliação: ${nota} de 5">`;
-  for(let i=1;i<=5;i++) h += `<button class="${i<=nota?'on':'off'}" data-estrela="${i}" data-id="${id}" data-campo="${campo}" aria-label="${i} estrela${i>1?'s':''}"><svg viewBox="0 0 24 24"><path d="${estrelaPath}" stroke-width="1.2" stroke-linejoin="round"/></svg></button>`;
+  let h = `<div class="estrelas" role="group" aria-label="Nota ${campo==='nota'?'geral':campo.slice(4)}: ${nota} de 5">`;
+  for(let i=1;i<=5;i++) h += `<button class="${i<=nota?'on':'off'}" data-estrela="${i}" data-id="${id}" data-campo="${campo}" aria-label="Dar ${i} estrela${i>1?'s':''}" aria-pressed="${i<=nota}"><svg viewBox="0 0 24 24"><path d="${estrelaPath}" stroke-width="1.2" stroke-linejoin="round"/></svg></button>`;
   return h + '</div>';
 }
 
@@ -471,13 +502,13 @@ function vagaHTML(e){
     <button class="cab" data-acao="rota" data-id="${e.id}" aria-label="Rota até ${esc(e.nome)}">
       <span class="nome">${esc(e.nome)}</span><span class="data">${fmtData(e.data)}</span>
     </button>
-    <button class="pilha" data-acao="galeria" data-id="${e.id}" aria-label="Ver as ${e.fotos.length} fotos">
+    <button class="pilha" data-acao="galeria" data-id="${e.id}" aria-label="Ver as ${e.fotos.length} fotos de ${esc(e.nome)}">
       ${e.fotos.length ? pilha : '<span class="aviso">sem fotos ainda</span>'}
       ${e.fotos.length>1?`<span class="qtd-fotos">${e.fotos.length} fotos</span>`:''}
     </button>
     ${carimbo}
     ${estrelasHTML(e.nota, e.id)}
-    <button class="detalhes-btn" data-acao="detalhes" data-id="${e.id}">detalhes</button>
+    <button class="detalhes-btn" data-acao="detalhes" data-id="${e.id}" aria-label="Detalhes de ${esc(e.nome)}">Detalhes</button>
   </article>`;
 }
 
@@ -517,18 +548,22 @@ function render(){
     if(idx % 2) idx -= 1;                 // em tela grande o índice aponta para a página esquerda
     f.innerHTML = paginaHTML(idx,'esq') + paginaHTML(idx+1,'dir');
     const pags = f.querySelectorAll('.pagina');
-    pags[0].insertAdjacentHTML('beforeend', `<button class="virar ant" data-virar="-1" aria-label="Página anterior" ${idx<=0?'disabled':''}>‹</button>`);
-    pags[1].insertAdjacentHTML('beforeend', `<button class="virar prox" data-virar="1" aria-label="Próxima página" ${idx+1>=total?'disabled':''}>›</button>`);
+    pags[0].insertAdjacentHTML('beforeend', `<button class="virar ant" data-virar="-1" aria-label="Página anterior" ${idx<=0?'hidden':''}>${SETA_ANT}</button>`);
+    pags[1].insertAdjacentHTML('beforeend', `<button class="virar prox" data-virar="1" aria-label="Próxima página" ${idx+1>=total?'hidden':''}>${SETA_PROX}</button>`);
   } else {
     f.innerHTML = paginaHTML(idx,'');
     const p = f.querySelector('.pagina');
-    p.insertAdjacentHTML('beforeend', `<button class="virar ant" data-virar="-1" aria-label="Página anterior" ${idx<=0?'disabled':''}>‹</button><button class="virar prox" data-virar="1" aria-label="Próxima página" ${idx>=total?'disabled':''}>›</button>`);
+    $('#cel-ant').innerHTML = SETA_ANT; $('#cel-prox').innerHTML = SETA_PROX;
+    $('#cel-ant').style.visibility = idx<=0 ? 'hidden' : ''; $('#cel-prox').style.visibility = idx>=total ? 'hidden' : '';
+    p.insertAdjacentHTML('beforeend', `<button class="virar ant" data-virar="-1" aria-label="Página anterior" ${idx<=0?'hidden':''}>${SETA_ANT}</button><button class="virar prox" data-virar="1" aria-label="Próxima página" ${idx>=total?'hidden':''}>${SETA_PROX}</button>`);
   }
   const ganhos = BROCHES.filter(b=>b.ganho).length;
   $('#contagem-broches').textContent = `${ganhos} de ${BROCHES.length}`;
 }
 
 /* virar página */
+const SETA_ANT = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const SETA_PROX = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 let virando = false;
 function virar(dir){
   const total = totalPaginasDiario();
@@ -573,7 +608,16 @@ function painel(html){
   $('#veu').hidden = false;
   $('#folha').scrollTop = 0;
   setTimeout(()=>$('#fechar').focus(), 30);
+  ligarCarrossel();
 }
+$('#folha').addEventListener('keydown', ev => {
+  if(ev.key !== 'Tab') return;
+  const f = [...$('#folha').querySelectorAll('button:not([hidden]),a[href],input,[tabindex="0"]')].filter(x=>x.offsetParent);
+  if(!f.length) return;
+  const pri = f[0], ult = f[f.length-1];
+  if(ev.shiftKey && document.activeElement===pri){ ev.preventDefault(); ult.focus(); }
+  else if(!ev.shiftKey && document.activeElement===ult){ ev.preventDefault(); pri.focus(); }
+});
 function fecharPainel(){ $('#veu').hidden = true; ultimoFoco && ultimoFoco.focus && ultimoFoco.focus(); }
 const achar = id => entradas.find(e=>e.id==id);
 
@@ -592,16 +636,39 @@ function painelRota(e){
     </div>`);
 }
 
+function carrosselHTML(e){
+  if(!e.fotos.length) return `<div class="sem-fotos">Nenhuma foto ainda. Você pode guardar até 10.</div>`;
+  const n = e.fotos.length;
+  return `<div class="carrossel" role="region" aria-roledescription="carrossel" aria-label="Fotos de ${esc(e.nome)}">
+    <div class="trilho" tabindex="0" aria-label="Deslize para ver as fotos">${e.fotos.map((f,i)=>`<img src="${fotoSrc(f)}" alt="Foto ${i+1} de ${n}, ${esc(e.nome)}">`).join('')}</div>
+    ${n>1?`<button class="car-btn ant" data-car="-1" aria-label="Foto anterior" hidden>${SETA_ANT}</button>
+    <button class="car-btn prox" data-car="1" aria-label="Próxima foto">${SETA_PROX}</button>
+    <div class="car-cont" aria-live="polite">1 de ${n}</div>`:''}
+  </div>`;
+}
+function ligarCarrossel(){
+  const tr = $('#folha .trilho'); if(!tr) return;
+  const atualizar = () => {
+    const n = tr.children.length, i = Math.round(tr.scrollLeft / tr.clientWidth);
+    const c = $('#folha .car-cont'); if(c) c.textContent = `${i+1} de ${n}`;
+    const a = $('#folha .car-btn.ant'), b = $('#folha .car-btn.prox');
+    if(a) a.hidden = i<=0; if(b) b.hidden = i>=n-1;
+  };
+  tr.addEventListener('scroll', () => { clearTimeout(tr.t); tr.t = setTimeout(atualizar, 60); });
+  tr.addEventListener('keydown', ev => { if(ev.key==='ArrowRight'||ev.key==='ArrowLeft'){ ev.stopPropagation(); ev.preventDefault(); passarFoto(ev.key==='ArrowRight'?1:-1); } });
+}
+function passarFoto(d){
+  const tr = $('#folha .trilho'); if(!tr) return;
+  tr.scrollBy({left: d*tr.clientWidth, behavior: reduzir.matches ? 'auto' : 'smooth'});
+}
 function painelGaleria(e){
-  if(!e.fotos.length){ painel(`<h2 id="folha-titulo">${esc(e.nome)}</h2><p>Nenhuma foto guardada ainda. Você pode adicionar até 10.</p>`); return; }
-  painel(`<h2 id="folha-titulo">${esc(e.nome)}</h2><p class="sub">${e.fotos.length} de 10 fotos · deslize para o lado</p>
-    <div class="galeria">${e.fotos.map((f,i)=>`<figure><img src="${fotoSrc(f)}" alt="${esc(e.legendas?.[i]||'Foto da cachoeira')}"><figcaption>${esc(e.legendas?.[i]||'')}</figcaption></figure>`).join('')}</div>`);
+  painel(`${carrosselHTML(e)}<h2 id="folha-titulo">${esc(e.nome)}</h2><p class="sub">${e.fotos.length} de 10 fotos</p>`);
 }
 
 function painelDetalhes(e){
   const subs = Object.entries(e.sub||{}).map(([k,v])=>`<span>${k}</span>${estrelasHTML(v,e.id,'sub:'+k)}`).join('');
   const ficha = Object.entries(e.ficha||{}).map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('');
-  painel(`<h2 id="folha-titulo">${esc(e.nome)}</h2>
+  painel(`${carrosselHTML(e)}<h2 id="folha-titulo">${esc(e.nome)}</h2>
     <p class="sub">${esc(e.lugar)} · ${fmtDataLonga(e.data)} · ${e.verificada?'check-in verificado':'registrada de memória'}</p>
     <div class="notas"><span>Geral</span>${estrelasHTML(e.nota,e.id)}${subs}</div>
     ${e.comoFoi?`<h3>Como foi</h3><p class="como-foi">${esc(e.comoFoi)}</p>`:''}
@@ -643,7 +710,7 @@ function guardar(){
   const err = $('#erro-novo');
   novo.data = $('#data-visita').value || novo.data;
   if(!novo.nome){ err.hidden=false; err.textContent='Escolha uma cachoeira da lista ou cadastre uma nova.'; $('#busca-nome').focus(); return; }
-  const e = {id:prox++,nome:novo.nome,lugar:novo.lugar||'Cadastrada por você',data:novo.data,nota:novo.nota,fotos:novo.fotos.slice(0,10),legendas:[],
+  const e = {id:prox++,nome:novo.nome,lugar:novo.lugar||'Cadastrada por você',data:novo.data,nota:novo.nota,fotos:novo.fotos.slice(0,10),
     verificada:false,fav:false,sub:{},ficha:{},visitas:1,nova:novo.novaCadastrada};
   entradas.push(e);
   fecharPainel();
@@ -747,6 +814,7 @@ document.querySelectorAll('[data-abrir]').forEach(b => b.addEventListener('click
 document.addEventListener('click', ev => {
   const t = ev.target.closest('button'); if(!t) return;
   if(t.dataset.virar){ virar(+t.dataset.virar); return; }
+  if(t.dataset.car){ passarFoto(+t.dataset.car); return; }
   if(t.dataset.estrela){
     const n = +t.dataset.estrela, id = t.dataset.id, campo = t.dataset.campo;
     if(id==='novo'){ novo.nota = n; $('#nota-nova').innerHTML = estrelasHTML(n,'novo'); return; }
