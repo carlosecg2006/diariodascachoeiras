@@ -45,7 +45,7 @@ Uma folha do diário com seis vagas.
 _Evitar_: folha, tela
 
 **Volume**:
-Um livro do diário com 10 páginas (60 vagas). Quando enche, começa o volume seguinte.
+Um livro do diário com 10 páginas (60 vagas), formado pela ordem de registro dividida de 60 em 60. Quando enche, começa o volume seguinte.
 _Evitar_: livro, caderno, tomo
 
 **Contracapa**:
@@ -99,7 +99,7 @@ Uma nota opcional de 1 a 5 para um aspecto da visita: segurança, movimento, ban
 _Evitar_: sub-nota, critério, avaliação detalhada
 
 **Média da comunidade**:
-A média anônima das notas de todas as pessoas para uma cachoeira do mapa, mostrada só com pelo menos 3 pessoas avaliando.
+A média anônima das notas de uma cachoeira do mapa, em que cada pessoa conta uma vez, pela nota da sua visita verificada mais recente. Só aparece com pelo menos 3 pessoas.
 _Evitar_: nota pública, ranking, avaliação geral
 
 ## Coleção

@@ -57,6 +57,7 @@ Um diário de cachoeiras que mistura diário de papel com álbum de fotos. Você
 - **Fitinhas das favoritas:** você marca uma cachoeira como favorita pelo ícone da fitinha nos detalhes. Cada favorita ganha uma fitinha saindo do livro, para pular direto até ela. **Máximo de 5 fitinhas por volume**; a lista completa fica no filtro "favoritas".
 - **Cada volume tem 10 páginas (60 cachoeiras).** Diário cheio vira "Volume II", e os volumes antigos ficam numa estante.
 - **Apagar uma cachoeira:** as que vêm depois sobem uma vaga para preencher o buraco. O diário nunca fica com vagas vazias no meio, e o "+" fica sempre logo depois da última cachoeira.
+  - Isso vale entre volumes: apagar uma visita do Volume I faz a primeira do Volume II subir para ele. Se o último volume ficar vazio, ele some da estante, mas broches já ganhos continuam.
 - **Voltar à mesma cachoeira:** cada visita é um registro novo, com fotos, data e avaliação próprias. Nos detalhes aparece "Você já esteve aqui N vezes", com links para as outras visitas.
 
 ### Ordem e filtros
@@ -94,6 +95,9 @@ Cada cachoeira ocupa uma vaga da página e tem 4 partes, cada uma com sua ação
 - **Cachoeira que não está no mapa:** dá para cadastrar uma nova normalmente. Ela entra no diário, mas **não tem rota**.
 - **Só nome e data são obrigatórios** (a data já vem preenchida com hoje). Todo o resto é opcional e dá para completar depois.
 - **Visitas antigas:** dá para registrar cachoeiras visitadas antes de ter o app, escolhendo a data no passado. Elas entram com o carimbo "registrada de memória" e não contam para os broches.
+- **"Estou aqui agora":** um botão no "+" que faz o check-in na hora e cria a visita com a data de hoje. O resto dá para completar depois em casa.
+  - O check-in só vale se feito no local, nunca depois.
+  - A data de uma visita verificada fica travada no dia do check-in. Numa visita de memória, a data é livre.
 - **Cachoeiras cadastradas por você ficam só no seu diário.** Não aparecem no mapa de mais ninguém, para manter as cachoeiras "secretas" em segredo.
 - Você adiciona as fotos e os detalhes (veja abaixo).
 
@@ -175,10 +179,13 @@ Um mapa próprio para cachoeiras, meio Pokémon GO, mas focado em buscar.
   - Se dá para chegar de carro
 - **Névoa no mapa:** cada check-in revela um círculo de **10 km** em volta da cachoeira. O resto do mapa fica coberto por uma névoa leve, só visual: dá para ver e buscar todas as cachoeiras, inclusive as que estão debaixo dela.
 - **Lista "quero ir":** a cachoeira aparece no diário como um post-it colado, esperando a visita. Cada item pode ter uma data **"pretendo ir em"**.
+- Ao registrar uma visita a uma cachoeira da lista, o post-it sai sozinho, com o aviso "Cachoeira X saiu da sua lista Quero ir". Dá para colar de volta.
 - Tocar numa cachoeira abre a rota no Google Maps ou no Waze.
 
 - **De onde vêm as notas do mapa:** de **médias anônimas** das avaliações de todos os usuários. O mapa mostra só a média, nunca quem avaliou. Fotos, textos e o diário de cada um continuam totalmente privados.
 - A média só aparece com **pelo menos 3 avaliações** de pessoas diferentes. Com menos, aparece "poucas avaliações".
+- **Só visitas verificadas** (com check-in) entram na média.
+- **Cada pessoa conta uma vez** por cachoeira, pela nota da visita verificada mais recente, mesmo que tenha ido várias vezes.
 
 ---
 
